@@ -10,7 +10,7 @@ const i18n = createI18n({
     en: en,
     pl: pl
   },
-  runtimeOnly: false,
+  runtimeOnly: import.meta.env.MODE === 'development' ? false : true,
   globalInjection: true,
   silentTranslationWarn: true,
   silentFallbackWarn: true,
