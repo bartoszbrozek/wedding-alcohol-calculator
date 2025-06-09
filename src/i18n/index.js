@@ -19,6 +19,11 @@ const messages = {
       totalVolume: 'Total Volume (ml)',
       export: 'Export to Excel',
       print: 'Print',
+      clearForm: 'Clear Form',
+      clearFormTitle: 'Clear Form',
+      clearFormMessage: 'Are you sure you want to clear all form data? This action cannot be undone.',
+      clear: 'Clear',
+      cancel: 'Cancel',
       fields: {
         alcoholicBeerDrinkers: 'Alcoholic Beer Drinkers',
         nonAlcoholicBeerDrinkers: 'Non-Alcoholic Beer Drinkers',
@@ -60,6 +65,11 @@ const messages = {
       totalVolume: 'Całkowita Objętość (ml)',
       export: 'Eksportuj do Excela',
       print: 'Drukuj',
+      clearForm: 'Wyczyść Formularz',
+      clearFormTitle: 'Wyczyść Formularz',
+      clearFormMessage: 'Czy na pewno chcesz wyczyścić wszystkie dane formularza? Tej operacji nie można cofnąć.',
+      clear: 'Wyczyść',
+      cancel: 'Anuluj',
       fields: {
         alcoholicBeerDrinkers: 'Pijący Piwo Alkoholowe',
         nonAlcoholicBeerDrinkers: 'Pijący Piwo Bezalkoholowe',

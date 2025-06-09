@@ -5,13 +5,54 @@
         <v-card class="mx-auto" max-width="1000" elevation="2">
           <v-card-title class="text-h4 text-center py-6 bg-primary text-white d-flex justify-space-between align-center">
             {{ $t('app.title') }}
-            <v-btn
-              color="white"
-              @click="toggleLanguage"
-            >
-              {{ currentLanguage.toUpperCase() }}
-            </v-btn>
+            <div class="d-flex align-center">
+              <v-btn
+                color="white"
+                variant="text"
+                size="small"
+                prepend-icon="mdi-delete"
+                @click="confirmClearForm"
+                class="me-2"
+              >
+                {{ $t('app.clearForm') }}
+              </v-btn>
+              <v-btn
+                color="white"
+                variant="text"
+                @click="toggleLanguage"
+              >
+                {{ currentLanguage.toUpperCase() }}
+              </v-btn>
+            </div>
           </v-card-title>
+
+          <v-dialog v-model="showClearDialog" max-width="400">
+            <v-card>
+              <v-card-title class="text-h5">
+                {{ $t('app.clearFormTitle') }}
+              </v-card-title>
+              <v-card-text>
+                {{ $t('app.clearFormMessage') }}
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="grey-darken-1"
+                  variant="text"
+                  @click="showClearDialog = false"
+                >
+                  {{ $t('app.cancel') }}
+                </v-btn>
+                <v-btn
+                  color="error"
+                  variant="text"
+                  @click="clearForm"
+                >
+                  {{ $t('app.clear') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
           <v-card-text class="pa-6">
             <v-form @submit.prevent="calculateQuantities" v-model="isFormValid">
@@ -901,5 +942,46 @@ function printResults() {
   printWindow.focus()
   printWindow.print()
   printWindow.close()
+}
+
+const showClearDialog = ref(false)
+
+function confirmClearForm() {
+  showClearDialog.value = true
+}
+
+function clearForm() {
+  // Reset guest info
+  Object.keys(guestInfo).forEach(key => {
+    guestInfo[key] = null
+  })
+
+  // Reset consumption
+  Object.keys(consumption).forEach(key => {
+    consumption[key] = null
+  })
+
+  // Reset alcohol types
+  alcoholTypes.value = [{
+    name: '',
+    volume: null,
+    category: 'alcoholic_beer'
+  }]
+
+  // Reset drink types
+  drinkTypes.value = [{
+    name: '',
+    ingredients: [{ alcohol: '', volume: null }]
+  }]
+
+  // Clear results
+  results.value = []
+  showResults.value = false
+
+  // Close dialog
+  showClearDialog.value = false
+
+  // Clear saved data
+  localStorage.removeItem('weddingCalculatorData')
 }
 </script>
