@@ -278,4 +278,266 @@ describe('Wedding Calculator', () => {
       expect(wrapper.vm.isFormValid).toBe(false)
     })
   })
+
+  describe('Simple Scenarios', () => {
+    it('calculates single beer type for one person', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 1
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 500
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [{
+        name: 'Test Beer',
+        volume: 500,
+        category: 'alcoholic_beer'
+      }]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(1)
+      expect(results[0].quantity).toBe(1)
+      expect(results[0].totalVolume).toBe(500)
+    })
+
+    it('calculates single non-alcoholic drink for one person', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 1
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 1
+
+      wrapper.vm.alcoholTypes = [{
+        name: 'Cola',
+        volume: 1000,
+        category: 'non_alcoholic_drink'
+      }]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(1)
+      expect(results[0].quantity).toBe(1)
+      expect(results[0].totalVolume).toBe(150) // Standard non-alcoholic drink volume (150ml)
+    })
+  })
+
+  describe('Complex Drink Scenarios', () => {
+    it('calculates quantities for a complex cocktail with multiple ingredients', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 10
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 2
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [
+        {
+          name: 'Vodka',
+          volume: 700,
+          category: 'alcoholic_drink'
+        },
+        {
+          name: 'Orange Juice',
+          volume: 1000,
+          category: 'non_alcoholic_drink'
+        },
+        {
+          name: 'Cranberry Juice',
+          volume: 1000,
+          category: 'non_alcoholic_drink'
+        }
+      ]
+
+      wrapper.vm.drinkTypes = [
+        {
+          name: 'Sea Breeze',
+          ingredients: [
+            {
+              alcohol: 'Vodka',
+              volume: 50
+            },
+            {
+              alcohol: 'Cranberry Juice',
+              volume: 100
+            },
+            {
+              alcohol: 'Orange Juice',
+              volume: 50
+            }
+          ]
+        }
+      ]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(3)
+      
+      const vodka = results.find(r => r.type.includes('Vodka'))
+      const cranberry = results.find(r => r.type.includes('Cranberry'))
+      const orange = results.find(r => r.type.includes('Orange'))
+
+      // 10 people * 2 drinks * 50ml / 700ml per bottle
+      expect(vodka.quantity).toBe(Math.ceil((10 * 2 * 50) / 700))
+      // 10 people * 2 drinks * 100ml / 1000ml per bottle
+      expect(cranberry.quantity).toBe(Math.ceil((10 * 2 * 100) / 1000))
+      // 10 people * 2 drinks * 50ml / 1000ml per bottle
+      expect(orange.quantity).toBe(Math.ceil((10 * 2 * 50) / 1000))
+    })
+
+    it('handles multiple drink types with shared ingredients', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 20
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 3
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [
+        {
+          name: 'Vodka',
+          volume: 700,
+          category: 'alcoholic_drink'
+        },
+        {
+          name: 'Orange Juice',
+          volume: 1000,
+          category: 'non_alcoholic_drink'
+        }
+      ]
+
+      wrapper.vm.drinkTypes = [
+        {
+          name: 'Screwdriver',
+          ingredients: [
+            {
+              alcohol: 'Vodka',
+              volume: 50
+            },
+            {
+              alcohol: 'Orange Juice',
+              volume: 150
+            }
+          ]
+        },
+        {
+          name: 'Vodka Orange',
+          ingredients: [
+            {
+              alcohol: 'Vodka',
+              volume: 50
+            },
+            {
+              alcohol: 'Orange Juice',
+              volume: 100
+            }
+          ]
+        }
+      ]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(2)
+      
+      const vodka = results.find(r => r.type.includes('Vodka'))
+      const orange = results.find(r => r.type.includes('Orange'))
+
+      // Total vodka needed: 20 people * 3 drinks * 50ml = 3000ml
+      // 3000ml / 700ml per bottle = 4.29 bottles, rounded up to 5
+      expect(vodka.quantity).toBe(5)
+      // Total orange juice needed: 20 people * 3 drinks * ((150ml + 100ml) / 2) = 7500ml
+      // 7500ml / 1000ml per bottle = 7.5 bottles, rounded up to 8
+      expect(orange.quantity).toBe(8)
+    })
+  })
+
+  describe('Edge Cases', () => {
+    it('handles zero consumption correctly', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [{
+        name: 'Test Beer',
+        volume: 500,
+        category: 'alcoholic_beer'
+      }]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(0)
+    })
+
+    it('handles very small bottle sizes', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 1
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 100
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [{
+        name: 'Mini Beer',
+        volume: 50,
+        category: 'alcoholic_beer'
+      }]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(1)
+      expect(results[0].quantity).toBe(2) // 100ml / 50ml = 2 bottles
+    })
+
+    it('handles very large consumption values', async () => {
+      wrapper.vm.guestInfo.alcoholicBeerDrinkers = 100
+      wrapper.vm.guestInfo.nonAlcoholicBeerDrinkers = 0
+      wrapper.vm.guestInfo.alcoholicDrinkers = 0
+      wrapper.vm.guestInfo.nonAlcoholicDrinkers = 0
+
+      wrapper.vm.consumption.alcoholicBeerPerPerson = 5000
+      wrapper.vm.consumption.nonAlcoholicBeerPerPerson = 0
+      wrapper.vm.consumption.alcoholicDrinksPerPerson = 0
+      wrapper.vm.consumption.nonAlcoholicDrinksPerPerson = 0
+
+      wrapper.vm.alcoholTypes = [{
+        name: 'Large Beer',
+        volume: 500,
+        category: 'alcoholic_beer'
+      }]
+
+      await wrapper.vm.calculateQuantities()
+
+      const results = wrapper.vm.results
+      expect(results).toHaveLength(1)
+      expect(results[0].quantity).toBe(1000) // 100 people * 5000ml / 500ml = 1000 bottles
+    })
+  })
 }) 
