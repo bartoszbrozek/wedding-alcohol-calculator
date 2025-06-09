@@ -313,22 +313,10 @@
                   </v-card>
                 </v-card-text>
               </v-card>
-
-              <v-btn
-                color="primary"
-                type="submit"
-                block
-                :disabled="!isFormValid"
-                class="mt-4"
-                size="large"
-                elevation="2"
-              >
-                Calculate
-              </v-btn>
             </v-form>
           </v-card-text>
 
-          <v-card-text v-if="showResults" class="pa-6">
+          <v-card-text v-if="isFormValid && results.length > 0" class="pa-6">
             <v-card elevation="1">
               <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white">
                 Recommended Quantities
@@ -465,7 +453,7 @@ function calculateQuantities() {
   if (totalAlcoholicBeerVolume > 0 && alcoholicBeers.length > 0) {
     const volumePerType = totalAlcoholicBeerVolume / alcoholicBeers.length
     alcoholicBeers.forEach(alcohol => {
-      const quantity = Math.ceil(volumePerType / alcohol.volume)
+      const quantity = volumePerType / alcohol.volume
       alcoholQuantities.set(alcohol.name, {
         quantity,
         totalVolume: quantity * alcohol.volume,
@@ -477,7 +465,7 @@ function calculateQuantities() {
   if (totalNonAlcoholicBeerVolume > 0 && nonAlcoholicBeers.length > 0) {
     const volumePerType = totalNonAlcoholicBeerVolume / nonAlcoholicBeers.length
     nonAlcoholicBeers.forEach(alcohol => {
-      const quantity = Math.ceil(volumePerType / alcohol.volume)
+      const quantity = volumePerType / alcohol.volume
       alcoholQuantities.set(alcohol.name, {
         quantity,
         totalVolume: quantity * alcohol.volume,
@@ -500,7 +488,7 @@ function calculateQuantities() {
 
     if (validDrinkTypes.length > 0) {
       // Calculate total drinks needed
-      const drinksPerType = Math.ceil(totalAlcoholicDrinks / validDrinkTypes.length)
+      const drinksPerType = totalAlcoholicDrinks / validDrinkTypes.length
       
       validDrinkTypes.forEach(drink => {
         // Calculate ingredients needed for this drink type
@@ -508,7 +496,7 @@ function calculateQuantities() {
           const alcoholType = alcoholTypes.value.find(a => a.name === ingredient.alcohol)
           if (alcoholType) {
             const totalIngredientVolume = drinksPerType * ingredient.volume
-            const ingredientQuantity = Math.ceil(totalIngredientVolume / alcoholType.volume)
+            const ingredientQuantity = totalIngredientVolume / alcoholType.volume
             
             // Add or update the quantity for this alcohol type
             const existing = alcoholQuantities.get(alcoholType.name)
@@ -527,10 +515,10 @@ function calculateQuantities() {
       })
     } else if (alcoholicDrinks.length > 0) {
       // Handle direct alcoholic drinks only if no custom drinks are defined
-      const drinksPerType = Math.ceil(totalAlcoholicDrinks / alcoholicDrinks.length)
+      const drinksPerType = totalAlcoholicDrinks / alcoholicDrinks.length
       alcoholicDrinks.forEach(alcohol => {
         const totalVolume = drinksPerType * 50 // Assuming 50ml per drink as standard
-        const quantity = Math.ceil(totalVolume / alcohol.volume)
+        const quantity = totalVolume / alcohol.volume
         alcoholQuantities.set(alcohol.name, {
           quantity,
           totalVolume: quantity * alcohol.volume,
@@ -541,10 +529,10 @@ function calculateQuantities() {
   }
 
   if (totalNonAlcoholicDrinks > 0 && nonAlcoholicDrinks.length > 0) {
-    const drinksPerType = Math.ceil(totalNonAlcoholicDrinks / nonAlcoholicDrinks.length)
+    const drinksPerType = totalNonAlcoholicDrinks / nonAlcoholicDrinks.length
     nonAlcoholicDrinks.forEach(alcohol => {
       const totalVolume = drinksPerType * 250 // Assuming 250ml per non-alcoholic drink as standard
-      const quantity = Math.ceil(totalVolume / alcohol.volume)
+      const quantity = totalVolume / alcohol.volume
       alcoholQuantities.set(alcohol.name, {
         quantity,
         totalVolume: quantity * alcohol.volume,
@@ -553,12 +541,12 @@ function calculateQuantities() {
     })
   }
 
-  // Convert the map to results array
+  // Convert the map to results array and round up quantities only at the end
   alcoholQuantities.forEach((value, key) => {
     newResults.push({
       type: `${value.category} - ${key}`,
-      quantity: value.quantity,
-      totalVolume: value.totalVolume
+      quantity: Math.ceil(value.quantity),
+      totalVolume: Math.ceil(value.totalVolume)
     })
   })
 
@@ -593,11 +581,14 @@ function loadData() {
   }
 }
 
-// Watch for changes in all reactive data
+// Watch for changes in all reactive data and recalculate
 watch(
   [guestInfo, consumption, alcoholTypes, drinkTypes],
   () => {
     saveData()
+    if (isFormValid.value) {
+      calculateQuantities()
+    }
   },
   { deep: true }
 )
@@ -605,5 +596,8 @@ watch(
 // Load data when component is mounted
 onMounted(() => {
   loadData()
+  if (isFormValid.value) {
+    calculateQuantities()
+  }
 })
 </script>
