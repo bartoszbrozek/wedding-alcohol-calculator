@@ -597,11 +597,23 @@ import { saveAs } from 'file-saver'
 
 const { t, locale } = useI18n()
 
-const currentLanguage = computed(() => locale.value)
+const currentLanguage = ref(locale.value)
 
 function toggleLanguage() {
-  locale.value = locale.value === 'en' ? 'pl' : 'en'
+  const newLocale = currentLanguage.value === 'en' ? 'pl' : 'en'
+  locale.value = newLocale
+  currentLanguage.value = newLocale
+  localStorage.setItem('preferredLanguage', newLocale)
 }
+
+// Load preferred language on mount
+onMounted(() => {
+  const savedLanguage = localStorage.getItem('preferredLanguage')
+  if (savedLanguage) {
+    locale.value = savedLanguage
+    currentLanguage.value = savedLanguage
+  }
+})
 
 const isFormValid = ref(false)
 

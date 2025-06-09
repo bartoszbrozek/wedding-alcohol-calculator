@@ -4,7 +4,7 @@ import pl from './pl'
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'en',
+  locale: localStorage.getItem('preferredLanguage') || 'en',
   fallbackLocale: 'en',
   messages: {
     en: en,
@@ -16,7 +16,8 @@ const i18n = createI18n({
   silentFallbackWarn: true,
   missingWarn: false,
   fallbackWarn: false,
-  allowComposition: true
+  allowComposition: true,
+  sync: true
 })
 
 export default i18n 
