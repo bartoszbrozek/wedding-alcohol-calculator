@@ -12,7 +12,7 @@ const i18n = createI18n({
     pl
   },
   // Force runtime-only mode for all environments
-  runtimeOnly: false,
+  runtimeOnly: true,
   // Enable global injection
   globalInjection: true,
   // Disable warnings
