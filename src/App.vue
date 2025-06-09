@@ -683,24 +683,47 @@ function calculateQuantities() {
   const totalAlcoholicDrinks = guestInfo.alcoholicDrinkers * consumption.alcoholicDrinksPerPerson
   const totalNonAlcoholicDrinks = guestInfo.nonAlcoholicDrinkers * consumption.nonAlcoholicDrinksPerPerson
 
-  if (totalAlcoholicDrinks > 0) {
-    // Handle custom drinks
-    const validDrinkTypes = drinkTypes.value.filter(drink => 
-      drink.name && 
-      drink.ingredients.length > 0 && 
-      drink.ingredients.every(ing => ing.alcohol && ing.volume)
-    )
+  // Handle custom drinks
+  const validDrinkTypes = drinkTypes.value.filter(drink => 
+    drink.name && 
+    drink.ingredients.length > 0 && 
+    drink.ingredients.every(ing => ing.alcohol && ing.volume)
+  )
 
-    if (validDrinkTypes.length > 0) {
-      // Calculate total drinks needed
-      const drinksPerType = totalAlcoholicDrinks / validDrinkTypes.length
-      
-      validDrinkTypes.forEach(drink => {
-        // Calculate ingredients needed for this drink type
-        drink.ingredients.forEach(ingredient => {
-          const alcoholType = alcoholTypes.value.find(a => a.name === ingredient.alcohol)
-          if (alcoholType) {
-            const totalIngredientVolume = drinksPerType * ingredient.volume
+  if (validDrinkTypes.length > 0) {
+    // Calculate total drinks needed
+    const alcoholicDrinksPerType = totalAlcoholicDrinks / validDrinkTypes.length
+    const nonAlcoholicDrinksPerType = totalNonAlcoholicDrinks / validDrinkTypes.length
+    
+    validDrinkTypes.forEach(drink => {
+      // Calculate ingredients needed for this drink type
+      drink.ingredients.forEach(ingredient => {
+        const alcoholType = alcoholTypes.value.find(a => a.name === ingredient.alcohol)
+        if (alcoholType) {
+          let totalIngredientVolume = 0
+          
+          // For alcoholic ingredients, use alcoholic drinkers
+          if (alcoholType.category === 'alcoholic_drink') {
+            totalIngredientVolume = alcoholicDrinksPerType * ingredient.volume
+          }
+          // For non-alcoholic ingredients in mixed drinks, only use alcoholic drinkers
+          else if (alcoholType.category === 'non_alcoholic_drink') {
+            // If this is part of a mixed drink (has both alcoholic and non-alcoholic ingredients)
+            const isMixedDrink = drink.ingredients.some(ing => {
+              const ingType = alcoholTypes.value.find(a => a.name === ing.alcohol)
+              return ingType && ingType.category === 'alcoholic_drink'
+            })
+            
+            if (isMixedDrink) {
+              // For mixed drinks, only count non-alcoholic ingredients for alcoholic drinkers
+              totalIngredientVolume = alcoholicDrinksPerType * ingredient.volume
+            } else {
+              // For pure non-alcoholic drinks, count for both types of drinkers
+              totalIngredientVolume = (alcoholicDrinksPerType + nonAlcoholicDrinksPerType) * ingredient.volume
+            }
+          }
+          
+          if (totalIngredientVolume > 0) {
             const ingredientQuantity = totalIngredientVolume / alcoholType.volume
             
             // Add or update the quantity for this alcohol type
@@ -712,14 +735,16 @@ function calculateQuantities() {
               alcoholQuantities.set(alcoholType.name, {
                 quantity: ingredientQuantity,
                 totalVolume: ingredientQuantity * alcoholType.volume,
-                category: 'Alcoholic Drink'
+                category: alcoholType.category === 'non_alcoholic_drink' ? 'Non-Alcoholic Drink' : 'Alcoholic Drink'
               })
             }
           }
-        })
+        }
       })
-    } else if (alcoholicDrinks.length > 0) {
-      // Handle direct alcoholic drinks only if no custom drinks are defined
+    })
+  } else {
+    // Handle direct drinks only if no custom drinks are defined
+    if (totalAlcoholicDrinks > 0 && alcoholicDrinks.length > 0) {
       const drinksPerType = totalAlcoholicDrinks / alcoholicDrinks.length
       alcoholicDrinks.forEach(alcohol => {
         const totalVolume = drinksPerType * 50 // Assuming 50ml per drink as standard
@@ -731,19 +756,19 @@ function calculateQuantities() {
         })
       })
     }
-  }
 
-  if (totalNonAlcoholicDrinks > 0 && nonAlcoholicDrinks.length > 0) {
-    const drinksPerType = totalNonAlcoholicDrinks / nonAlcoholicDrinks.length
-    nonAlcoholicDrinks.forEach(alcohol => {
-      const totalVolume = drinksPerType * 250 // Assuming 250ml per non-alcoholic drink as standard
-      const quantity = totalVolume / alcohol.volume
-      alcoholQuantities.set(alcohol.name, {
-        quantity,
-        totalVolume: quantity * alcohol.volume,
-        category: 'Non-Alcoholic Drink'
+    if (totalNonAlcoholicDrinks > 0 && nonAlcoholicDrinks.length > 0) {
+      const drinksPerType = totalNonAlcoholicDrinks / nonAlcoholicDrinks.length
+      nonAlcoholicDrinks.forEach(alcohol => {
+        const totalVolume = drinksPerType * 250 // Assuming 250ml per non-alcoholic drink as standard
+        const quantity = totalVolume / alcohol.volume
+        alcoholQuantities.set(alcohol.name, {
+          quantity,
+          totalVolume: quantity * alcohol.volume,
+          category: 'Non-Alcoholic Drink'
+        })
       })
-    })
+    }
   }
 
   // Convert the map to results array and round up quantities only at the end
