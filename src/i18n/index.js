@@ -17,6 +17,8 @@ const messages = {
       type: 'Type',
       quantity: 'Quantity',
       totalVolume: 'Total Volume (ml)',
+      export: 'Export to Excel',
+      print: 'Print',
       fields: {
         alcoholicBeerDrinkers: 'Alcoholic Beer Drinkers',
         nonAlcoholicBeerDrinkers: 'Non-Alcoholic Beer Drinkers',
@@ -56,6 +58,8 @@ const messages = {
       type: 'Rodzaj',
       quantity: 'Ilość',
       totalVolume: 'Całkowita Objętość (ml)',
+      export: 'Eksportuj do Excela',
+      print: 'Drukuj',
       fields: {
         alcoholicBeerDrinkers: 'Pijący Piwo Alkoholowe',
         nonAlcoholicBeerDrinkers: 'Pijący Piwo Bezalkoholowe',

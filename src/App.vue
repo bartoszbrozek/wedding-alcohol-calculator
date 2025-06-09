@@ -7,7 +7,6 @@
             {{ $t('app.title') }}
             <v-btn
               color="white"
-              variant="text"
               @click="toggleLanguage"
             >
               {{ currentLanguage.toUpperCase() }}
@@ -338,8 +337,29 @@
 
           <v-card-text v-if="isFormValid && results.length > 0" class="pa-6">
             <v-card elevation="1">
-              <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white">
+              <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white d-flex justify-space-between align-center">
                 {{ $t('app.results') }}
+                <div>
+                  <v-btn
+                    color="white"
+                    variant="text"
+                    size="small"
+                    prepend-icon="mdi-file-excel"
+                    @click="exportToExcel"
+                    class="me-2"
+                  >
+                    {{ $t('app.export') }}
+                  </v-btn>
+                  <v-btn
+                    color="white"
+                    variant="text"
+                    size="small"
+                    prepend-icon="mdi-printer"
+                    @click="printResults"
+                  >
+                    {{ $t('app.print') }}
+                  </v-btn>
+                </div>
               </v-card-title>
               <v-card-text class="pt-4">
                 <v-table density="compact" bg-color="grey-lighten-4">
@@ -364,12 +384,127 @@
         </v-card>
       </v-container>
     </v-main>
+
+    <!-- Print template -->
+    <div v-show="false" ref="printTemplate">
+      <div class="print-header">
+        <h1>{{ $t('app.title') }}</h1>
+        <p>{{ new Date().toLocaleDateString() }}</p>
+      </div>
+
+      <div class="print-section">
+        <h2>{{ $t('app.guestInfo') }}</h2>
+        <table>
+          <tr>
+            <td>{{ $t('app.fields.alcoholicBeerDrinkers') }}:</td>
+            <td>{{ guestInfo.alcoholicBeerDrinkers }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.nonAlcoholicBeerDrinkers') }}:</td>
+            <td>{{ guestInfo.nonAlcoholicBeerDrinkers }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.alcoholicDrinkers') }}:</td>
+            <td>{{ guestInfo.alcoholicDrinkers }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.nonAlcoholicDrinkers') }}:</td>
+            <td>{{ guestInfo.nonAlcoholicDrinkers }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="print-section">
+        <h2>{{ $t('app.consumption') }}</h2>
+        <table>
+          <tr>
+            <td>{{ $t('app.fields.alcoholicBeer') }}:</td>
+            <td>{{ consumption.alcoholicBeerPerPerson }} ml</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.nonAlcoholicBeer') }}:</td>
+            <td>{{ consumption.nonAlcoholicBeerPerPerson }} ml</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.alcoholicDrinks') }}:</td>
+            <td>{{ consumption.alcoholicDrinksPerPerson }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t('app.fields.nonAlcoholicDrinks') }}:</td>
+            <td>{{ consumption.nonAlcoholicDrinksPerPerson }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="print-section">
+        <h2>{{ $t('app.alcoholTypes') }}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ $t('app.fields.category') }}</th>
+              <th>{{ $t('app.fields.name') }}</th>
+              <th>{{ $t('app.fields.volume') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index">
+              <td>{{ t(`app.categories.${alcohol.category}`) }}</td>
+              <td>{{ alcohol.name }}</td>
+              <td>{{ alcohol.volume }} ml</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="print-section">
+        <h2>{{ $t('app.drinkTypes') }}</h2>
+        <div v-for="(drink, index) in drinkTypes" :key="'drink-' + index" class="print-drink">
+          <h3>{{ drink.name }}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ $t('app.fields.alcohol') }}</th>
+                <th>{{ $t('app.fields.volume') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(ingredient, ingIndex) in drink.ingredients" :key="'ingredient-' + ingIndex">
+                <td>{{ ingredient.alcohol }}</td>
+                <td>{{ ingredient.volume }} ml</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="print-section">
+        <h2>{{ $t('app.results') }}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>{{ $t('app.type') }}</th>
+              <th>{{ $t('app.quantity') }}</th>
+              <th>{{ $t('app.totalVolume') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(result, index) in results" :key="index">
+              <td>{{ result.type }}</td>
+              <td>{{ result.quantity }}</td>
+              <td>{{ result.totalVolume }} ml</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </v-app>
 </template>
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 const { t, locale } = useI18n()
 
@@ -627,4 +762,144 @@ onMounted(() => {
   loadData()
   calculateQuantities()
 })
+
+const printTemplate = ref(null)
+
+function exportToExcel() {
+  // Prepare data for export
+  const data = [
+    // Guest Information
+    [{ [t('app.guestInfo')]: '' }],
+    [t('app.fields.alcoholicBeerDrinkers'), guestInfo.alcoholicBeerDrinkers],
+    [t('app.fields.nonAlcoholicBeerDrinkers'), guestInfo.nonAlcoholicBeerDrinkers],
+    [t('app.fields.alcoholicDrinkers'), guestInfo.alcoholicDrinkers],
+    [t('app.fields.nonAlcoholicDrinkers'), guestInfo.nonAlcoholicDrinkers],
+    [], // Empty row
+
+    // Consumption
+    [{ [t('app.consumption')]: '' }],
+    [t('app.fields.alcoholicBeer'), `${consumption.alcoholicBeerPerPerson} ml`],
+    [t('app.fields.nonAlcoholicBeer'), `${consumption.nonAlcoholicBeerPerPerson} ml`],
+    [t('app.fields.alcoholicDrinks'), consumption.alcoholicDrinksPerPerson],
+    [t('app.fields.nonAlcoholicDrinks'), consumption.nonAlcoholicDrinksPerPerson],
+    [], // Empty row
+
+    // Alcohol Types
+    [{ [t('app.alcoholTypes')]: '' }],
+    [t('app.fields.category'), t('app.fields.name'), t('app.fields.volume')],
+    ...alcoholTypes.value.map(alcohol => [
+      t(`app.categories.${alcohol.category}`),
+      alcohol.name,
+      `${alcohol.volume} ml`
+    ]),
+    [], // Empty row
+
+    // Drink Types
+    [{ [t('app.drinkTypes')]: '' }],
+    ...drinkTypes.value.flatMap(drink => [
+      [{ [drink.name]: '' }],
+      [t('app.fields.alcohol'), t('app.fields.volume')],
+      ...drink.ingredients.map(ing => [ing.alcohol, `${ing.volume} ml`]),
+      [] // Empty row after each drink
+    ]),
+
+    // Results
+    [{ [t('app.results')]: '' }],
+    [t('app.type'), t('app.quantity'), t('app.totalVolume')],
+    ...results.value.map(result => [
+      result.type,
+      result.quantity,
+      `${result.totalVolume} ml`
+    ])
+  ]
+
+  // Create worksheet
+  const ws = XLSX.utils.aoa_to_sheet(data)
+
+  // Create workbook
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Wedding Calculator')
+
+  // Generate Excel file
+  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+  const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+  
+  // Save file
+  saveAs(blob, `wedding-calculator-${new Date().toISOString().split('T')[0]}.xlsx`)
+}
+
+function printResults() {
+  const printWindow = window.open('', '_blank')
+  const printContent = printTemplate.value.innerHTML
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>${t('app.title')}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+          }
+          .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .print-section {
+            margin-bottom: 30px;
+          }
+          h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+          }
+          h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #1976d2;
+          }
+          h3 {
+            font-size: 16px;
+            margin: 15px 0;
+            color: #424242;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f5f5f5;
+          }
+          .print-drink {
+            margin-bottom: 20px;
+          }
+          @media print {
+            body {
+              margin: 0;
+              padding: 20px;
+            }
+            .print-section {
+              page-break-inside: avoid;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        ${printContent}
+      </body>
+    </html>
+  `)
+
+  printWindow.document.close()
+  printWindow.focus()
+  printWindow.print()
+  printWindow.close()
+}
 </script>
