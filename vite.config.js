@@ -12,5 +12,8 @@ export default defineConfig({
         assetFileNames: 'assets/[name].[hash][extname]'
       }
     }
+  },
+  optimizeDeps: {
+    include: ['vue-i18n']
   }
 })
