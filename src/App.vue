@@ -272,7 +272,6 @@
                         color="error"
                         icon
                         @click="removeAlcoholType(index)"
-                        :disabled="alcoholTypes.length === 1"
                         variant="text"
                         size="small"
                       >
@@ -378,7 +377,6 @@
                                 color="error"
                                 icon
                                 @click="removeIngredient(index, ingIndex)"
-                                :disabled="drink.ingredients.length === 1"
                                 variant="text"
                                 size="small"
                               >
@@ -1180,11 +1178,6 @@ watch(
       const validIngredients = drink.ingredients.filter(ing => 
         currentAlcoholNames.includes(ing.alcohol)
       )
-
-      // If all ingredients were removed, add an empty one
-      if (validIngredients.length === 0) {
-        validIngredients.push({ alcohol: '', volume: null })
-      }
 
       return {
         ...drink,
