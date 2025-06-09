@@ -157,7 +157,6 @@
                     v-for="(drink, index) in drinkTypes"
                     :key="'drink-' + index"
                     class="mb-4"
-                    variant="outlined"
                   >
                     <v-card-text>
                       <v-row>
@@ -174,7 +173,7 @@
                             color="error"
                             icon
                             @click="removeDrinkType(index)"
-                            :disabled="drinkTypes.length === 1"
+                            :disabled="false"
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -185,7 +184,6 @@
                         v-for="(ingredient, ingIndex) in drink.ingredients"
                         :key="'ingredient-' + ingIndex"
                         class="mb-2"
-                        variant="outlined"
                       >
                         <v-card-text>
                           <v-row>
@@ -540,232 +538,3 @@ onMounted(() => {
   loadData()
 })
 </script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-h1 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.form-section {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-  font-weight: 500;
-}
-
-input[type="number"],
-input[type="text"],
-select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-height: 45px;
-}
-
-input[type="number"]:focus,
-input[type="text"]:focus,
-select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-.remove-btn {
-  background-color: #e74c3c;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.9rem;
-}
-
-.remove-btn:hover {
-  background-color: #c0392b;
-}
-
-.calculate-btn {
-  display: block;
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.2rem;
-  margin-top: 1rem;
-  background-color: #2ecc71;
-}
-
-.calculate-btn:hover {
-  background-color: #27ae60;
-}
-
-.alcohol-type,
-.drink-type {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.alcohol-type input,
-.drink-type input {
-  flex: 1;
-  min-width: 200px;
-}
-
-.alcohol-category {
-  min-width: 200px;
-}
-
-.alcohol-name {
-  min-width: 250px;
-}
-
-.alcohol-volume {
-  min-width: 150px;
-}
-
-.drink-ingredients {
-  margin: 1rem 0;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  flex: 1;
-}
-
-.drink-ingredient {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.drink-ingredient:last-child {
-  margin-bottom: 0;
-}
-
-.drink-ingredient select {
-  min-width: 250px;
-}
-
-.drink-ingredient input {
-  min-width: 150px;
-}
-
-.add-btn {
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.add-ingredient-btn {
-  background-color: #2ecc71;
-  margin-right: 0.5rem;
-}
-
-.add-ingredient-btn:hover {
-  background-color: #27ae60;
-}
-
-.results {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th, td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-tr:hover {
-  background-color: #f8f9fa;
-}
-
-@media (max-width: 768px) {
-  .container {
-    margin: 1rem auto;
-  }
-  
-  .alcohol-type,
-  .drink-type,
-  .drink-ingredient {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .alcohol-type input,
-  .drink-type input,
-  .drink-ingredient select,
-  .drink-ingredient input {
-    width: 100%;
-    min-width: 100%;
-  }
-}
-</style> 
