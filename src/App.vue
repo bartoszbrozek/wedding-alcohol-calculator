@@ -9,7 +9,7 @@
               max-width="50"
               class="mx-auto mb-2"
             ></v-img>
-            {{ $t('app.title') }}
+            Kalkulator Alkoholu na Wesele
             <div class="d-flex align-center">
               <v-btn
                 color="primary"
@@ -19,7 +19,7 @@
                 @click="confirmClearForm"
                 class="me-2"
               >
-                {{ $t('app.clearForm') }}
+                Wyczyść Formularz
               </v-btn>
               <v-btn
                 color="primary"
@@ -29,8 +29,10 @@
                 @click="showRandomizeDialog = true"
                 class="me-2"
               >
-                {{ $t('app.randomize') }}
+                Losuj
               </v-btn>
+              <!-- Language change button (temporarily hidden) -->
+              <!--
               <v-btn
                 color="primary"
                 variant="text"
@@ -38,16 +40,17 @@
               >
                 {{ currentLanguage.toUpperCase() }}
               </v-btn>
+              -->
             </div>
           </v-card-title>
 
           <v-dialog v-model="showClearDialog" max-width="400">
             <v-card>
               <v-card-title class="text-h5">
-                {{ $t('app.clearFormTitle') }}
+                Wyczyść Formularz
               </v-card-title>
               <v-card-text>
-                {{ $t('app.clearFormMessage') }}
+                Czy na pewno chcesz wyczyścić wszystkie dane formularza? Tej operacji nie można cofnąć.
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -56,14 +59,14 @@
                   variant="text"
                   @click="showClearDialog = false"
                 >
-                  {{ $t('app.cancel') }}
+                  Anuluj
                 </v-btn>
                 <v-btn
                   color="error"
                   variant="text"
                   @click="clearForm"
                 >
-                  {{ $t('app.clear') }}
+                  Wyczyść
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -72,10 +75,10 @@
           <v-dialog v-model="showRandomizeDialog" max-width="400">
             <v-card>
               <v-card-title class="text-h5">
-                {{ $t('app.randomizeTitle') }}
+                Losuj Dane Formularza
               </v-card-title>
               <v-card-text>
-                {{ $t('app.randomizeMessage') }}
+                Czy na pewno chcesz wylosować wszystkie dane formularza? To zastąpi wszystkie obecne wartości losowymi.
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -84,14 +87,14 @@
                   variant="text"
                   @click="showRandomizeDialog = false"
                 >
-                  {{ $t('app.cancel') }}
+                  Anuluj
                 </v-btn>
                 <v-btn
                   color="primary"
                   variant="text"
                   @click="confirmRandomize"
                 >
-                  {{ $t('app.randomize') }}
+                  Losuj
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -101,14 +104,14 @@
             <v-form @submit.prevent="calculateQuantities" v-model="isFormValid">
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
-                  {{ $t('app.guestInfo') }}
+                  Informacje o Gościach
                 </v-card-title>
                 <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicBeerDrinkers"
-                        :label="$t('app.fields.alcoholicBeerDrinkers')"
+                        label="Pijący Piwo Alkoholowe"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -120,7 +123,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicBeerDrinkers"
-                        :label="$t('app.fields.nonAlcoholicBeerDrinkers')"
+                        label="Pijący Piwo Bezalkoholowe"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -132,7 +135,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicDrinkers"
-                        :label="$t('app.fields.alcoholicDrinkers')"
+                        label="Pijący Drinki Alkoholowe"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -144,7 +147,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicDrinkers"
-                        :label="$t('app.fields.nonAlcoholicDrinkers')"
+                        label="Pijący Drinki Bezalkoholowe"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -159,14 +162,14 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
-                  {{ $t('app.consumption') }}
+                  Średnie Spożycie
                 </v-card-title>
                 <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.alcoholicBeerPerPerson"
-                        :label="$t('app.fields.alcoholicBeer')"
+                        label="Piwo Alkoholowe (ml)"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -178,7 +181,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.nonAlcoholicBeerPerPerson"
-                        :label="$t('app.fields.nonAlcoholicBeer')"
+                        label="Piwo Bezalkoholowe (ml)"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -190,7 +193,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.alcoholicDrinksPerPerson"
-                        :label="$t('app.fields.alcoholicDrinks')"
+                        label="Drinki Alkoholowe (ilość)"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -202,7 +205,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.nonAlcoholicDrinksPerPerson"
-                        :label="$t('app.fields.nonAlcoholicDrinks')"
+                        label="Drinki Bezalkoholowe (ilość)"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -217,7 +220,7 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
-                  {{ $t('app.alcoholTypes') }}
+                  Rodzaje Alkoholu
                   <v-btn
                     color="white"
                     @click="addAlcoholType"
@@ -225,7 +228,7 @@
                     size="small"
                     prepend-icon="mdi-plus"
                   >
-                    {{ $t('app.addType') }}
+                    Dodaj Rodzaj
                   </v-btn>
                 </v-card-title>
                 <v-card-text class="pt-4">
@@ -236,7 +239,7 @@
                         :items="categoryOptions"
                         item-title="label"
                         item-value="value"
-                        :label="$t('app.fields.category')"
+                        label="Kategoria"
                         :rules="[rules.required]"
                         required
                         density="compact"
@@ -247,7 +250,7 @@
                     <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="alcohol.name"
-                        :label="$t('app.fields.name')"
+                        label="Nazwa"
                         :rules="[rules.required]"
                         required
                         density="compact"
@@ -258,7 +261,7 @@
                     <v-col cols="12" sm="3">
                       <v-text-field
                         v-model.number="alcohol.volume"
-                        :label="$t('app.fields.volume')"
+                        label="Objętość (ml)"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -284,7 +287,7 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
-                  {{ $t('app.drinkTypes') }}
+                  Rodzaje Drinków
                   <v-btn
                     color="white"
                     @click="addDrinkType"
@@ -292,7 +295,7 @@
                     size="small"
                     prepend-icon="mdi-plus"
                   >
-                    {{ $t('app.addDrink') }}
+                    Dodaj Drink
                   </v-btn>
                 </v-card-title>
                 <v-card-text class="pt-4">
@@ -308,7 +311,7 @@
                         <v-col cols="12" sm="4">
                           <v-text-field
                             v-model="drink.name"
-                            :label="$t('app.fields.drinkName')"
+                            label="Nazwa Drinka"
                             :rules="[rules.required]"
                             required
                             density="compact"
@@ -344,7 +347,7 @@
                                 :items="nonBeerAlcoholTypes"
                                 item-title="name"
                                 item-value="name"
-                                :label="$t('app.fields.alcohol')"
+                                label="Alkohol"
                                 :rules="[rules.required]"
                                 required
                                 density="compact"
@@ -363,7 +366,7 @@
                             <v-col cols="12" sm="5">
                               <v-text-field
                                 v-model.number="ingredient.volume"
-                                :label="$t('app.fields.volume')"
+                                label="Objętość (ml)"
                                 type="number"
                                 :rules="[rules.required, rules.positive]"
                                 required
@@ -395,7 +398,7 @@
                         size="small"
                         prepend-icon="mdi-plus"
                       >
-                        {{ $t('app.addIngredient') }}
+                        Dodaj Składnik
                       </v-btn>
                     </v-card-text>
                   </v-card>
@@ -413,14 +416,14 @@
               <template v-slot:prepend>
                 <v-icon>mdi-alert</v-icon>
               </template>
-              {{ $t('app.warning') }}
+              Proszę wypełnić wszystkie wymagane pola prawidłowymi wartościami, aby zobaczyć wyniki.
             </v-alert>
           </v-card-text>
 
           <v-card-text v-if="isFormValid && results.length > 0" class="pa-6">
             <v-card elevation="1">
               <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white d-flex justify-space-between align-center">
-                {{ $t('app.results') }}
+                Zalecane Ilości
                 <div>
                   <v-btn
                     color="white"
@@ -430,7 +433,7 @@
                     @click="exportToExcel"
                     class="me-2"
                   >
-                    {{ $t('app.export') }}
+                    Eksportuj do Excela
                   </v-btn>
                   <v-btn
                     color="white"
@@ -439,7 +442,7 @@
                     prepend-icon="mdi-printer"
                     @click="printResults"
                   >
-                    {{ $t('app.print') }}
+                    Drukuj
                   </v-btn>
                 </div>
               </v-card-title>
@@ -447,9 +450,9 @@
                 <v-table density="compact" bg-color="grey-lighten-4">
                   <thead>
                     <tr>
-                      <th>{{ $t('app.type') }}</th>
-                      <th>{{ $t('app.quantity') }}</th>
-                      <th>{{ $t('app.totalVolume') }}</th>
+                      <th>Rodzaj</th>
+                      <th>Ilość</th>
+                      <th>Całkowita Objętość (ml)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -477,62 +480,62 @@
     <!-- Print template -->
     <div v-show="false" ref="printTemplate">
       <div class="print-header">
-        <h1>{{ $t('app.title') }}</h1>
+        <h1>Kalkulator Alkoholu na Wesele</h1>
         <p>{{ new Date().toLocaleDateString() }}</p>
       </div>
 
       <div class="print-section">
-        <h2>{{ $t('app.guestInfo') }}</h2>
+        <h2>Informacje o Gościach</h2>
         <table>
           <tr>
-            <td>{{ $t('app.fields.alcoholicBeerDrinkers') }}:</td>
+            <td>Pijący Piwo Alkoholowe:</td>
             <td>{{ guestInfo.alcoholicBeerDrinkers }}</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.nonAlcoholicBeerDrinkers') }}:</td>
+            <td>Pijący Piwo Bezalkoholowe:</td>
             <td>{{ guestInfo.nonAlcoholicBeerDrinkers }}</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.alcoholicDrinkers') }}:</td>
+            <td>Pijący Drinki Alkoholowe:</td>
             <td>{{ guestInfo.alcoholicDrinkers }}</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.nonAlcoholicDrinkers') }}:</td>
+            <td>Pijący Drinki Bezalkoholowe:</td>
             <td>{{ guestInfo.nonAlcoholicDrinkers }}</td>
           </tr>
         </table>
       </div>
 
       <div class="print-section">
-        <h2>{{ $t('app.consumption') }}</h2>
+        <h2>Średnie Spożycie</h2>
         <table>
           <tr>
-            <td>{{ $t('app.fields.alcoholicBeer') }}:</td>
+            <td>Piwo Alkoholowe (ml):</td>
             <td>{{ consumption.alcoholicBeerPerPerson }} ml</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.nonAlcoholicBeer') }}:</td>
+            <td>Piwo Bezalkoholowe (ml):</td>
             <td>{{ consumption.nonAlcoholicBeerPerPerson }} ml</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.alcoholicDrinks') }}:</td>
+            <td>Drinki Alkoholowe (ilość):</td>
             <td>{{ consumption.alcoholicDrinksPerPerson }}</td>
           </tr>
           <tr>
-            <td>{{ $t('app.fields.nonAlcoholicDrinks') }}:</td>
+            <td>Drinki Bezalkoholowe (ilość):</td>
             <td>{{ consumption.nonAlcoholicDrinksPerPerson }}</td>
           </tr>
         </table>
       </div>
 
       <div class="print-section">
-        <h2>{{ $t('app.alcoholTypes') }}</h2>
+        <h2>Rodzaje Alkoholu</h2>
         <table>
           <thead>
             <tr>
-              <th>{{ $t('app.fields.category') }}</th>
-              <th>{{ $t('app.fields.name') }}</th>
-              <th>{{ $t('app.fields.volume') }}</th>
+              <th>Kategoria</th>
+              <th>Nazwa</th>
+              <th>Objętość (ml)</th>
             </tr>
           </thead>
           <tbody>
@@ -546,14 +549,14 @@
       </div>
 
       <div class="print-section">
-        <h2>{{ $t('app.drinkTypes') }}</h2>
+        <h2>Rodzaje Drinków</h2>
         <div v-for="(drink, index) in drinkTypes" :key="'drink-' + index" class="print-drink">
           <h3>{{ drink.name }}</h3>
           <table>
             <thead>
               <tr>
-                <th>{{ $t('app.fields.alcohol') }}</th>
-                <th>{{ $t('app.fields.volume') }}</th>
+                <th>Alkohol</th>
+                <th>Objętość (ml)</th>
               </tr>
             </thead>
             <tbody>
@@ -567,13 +570,13 @@
       </div>
 
       <div class="print-section">
-        <h2>{{ $t('app.results') }}</h2>
+        <h2>Zalecane Ilości</h2>
         <table>
           <thead>
             <tr>
-              <th>{{ $t('app.type') }}</th>
-              <th>{{ $t('app.quantity') }}</th>
-              <th>{{ $t('app.totalVolume') }}</th>
+              <th>Rodzaj</th>
+              <th>Ilość</th>
+              <th>Całkowita Objętość (ml)</th>
             </tr>
           </thead>
           <tbody>
@@ -591,35 +594,35 @@
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n' // Commented out, no longer needed directly
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
-const { t, locale } = useI18n()
+// const { t, locale } = useI18n() // Commented out, no longer needed directly
 
-const currentLanguage = ref(locale.value)
+// const currentLanguage = ref(locale.value) // Commented out, no longer needed
 
-function toggleLanguage() {
-  const newLocale = currentLanguage.value === 'en' ? 'pl' : 'en'
-  locale.value = newLocale
-  currentLanguage.value = newLocale
-  localStorage.setItem('preferredLanguage', newLocale)
-}
+// function toggleLanguage() { // Commented out, no longer needed
+//   const newLocale = currentLanguage.value === 'en' ? 'pl' : 'en'
+//   locale.value = newLocale
+//   currentLanguage.value = newLocale
+//   localStorage.setItem('preferredLanguage', newLocale)
+// }
 
-// Load preferred language on mount
-onMounted(() => {
-  const savedLanguage = localStorage.getItem('preferredLanguage')
-  if (savedLanguage) {
-    locale.value = savedLanguage
-    currentLanguage.value = savedLanguage
-  }
-})
+// // Load preferred language on mount // Commented out, no longer needed
+// onMounted(() => {
+//   const savedLanguage = localStorage.getItem('preferredLanguage')
+//   if (savedLanguage) {
+//     locale.value = savedLanguage
+//     currentLanguage.value = savedLanguage
+//   }
+// })
 
 const isFormValid = ref(false)
 
 const rules = {
-  required: v => !!v || t('app.fields.required'),
-  positive: v => v > 0 || t('app.fields.positive')
+  required: v => !!v || 'Pole wymagane',
+  positive: v => v > 0 || 'Wartość musi być większa od 0'
 }
 
 const guestInfo = reactive({
@@ -651,10 +654,10 @@ const showResults = ref(false)
 const results = ref([])
 
 const categoryOptions = computed(() => [
-  { value: 'alcoholicBeer', label: t('app.categories.alcoholicBeer') },
-  { value: 'nonAlcoholicBeer', label: t('app.categories.nonAlcoholicBeer') },
-  { value: 'alcoholicDrink', label: t('app.categories.alcoholicDrink') },
-  { value: 'nonAlcoholicDrink', label: t('app.categories.nonAlcoholicDrink') }
+  { value: 'alcoholicBeer', label: 'Piwo alkoholowe' },
+  { value: 'nonAlcoholicBeer', label: 'Piwo bezalkoholowe' },
+  { value: 'alcoholicDrink', label: 'Drink alkoholowy' },
+  { value: 'nonAlcoholicDrink', label: 'Drink bezalkoholowy' }
 ])
 
 // Add computed property to filter out beer types
@@ -722,7 +725,7 @@ function calculateQuantities() {
       alcoholQuantities.set(alcohol.name, {
         quantity,
         totalVolume: quantity * alcohol.volume,
-        category: 'Alcoholic Beer'
+        category: 'Piwo alkoholowe'
       })
     })
   }
@@ -734,7 +737,7 @@ function calculateQuantities() {
       alcoholQuantities.set(alcohol.name, {
         quantity,
         totalVolume: quantity * alcohol.volume,
-        category: 'Non-Alcoholic Beer'
+        category: 'Piwo bezalkoholowe'
       })
     })
   }
@@ -795,7 +798,7 @@ function calculateQuantities() {
               alcoholQuantities.set(alcoholType.name, {
                 quantity: ingredientQuantity,
                 totalVolume: ingredientQuantity * alcoholType.volume,
-                category: alcoholType.category === 'nonAlcoholicDrink' ? 'Non-Alcoholic Drink' : 'Alcoholic Drink'
+                category: alcoholType.category === 'nonAlcoholicDrink' ? 'Drink bezalkoholowy' : 'Drink alkoholowy'
               })
             }
           }
@@ -812,7 +815,7 @@ function calculateQuantities() {
         alcoholQuantities.set(alcohol.name, {
           quantity,
           totalVolume: quantity * alcohol.volume,
-          category: 'Alcoholic Drink'
+          category: 'Drink alkoholowy'
         })
       })
     }
@@ -825,7 +828,7 @@ function calculateQuantities() {
         alcoholQuantities.set(alcohol.name, {
           quantity,
           totalVolume: quantity * alcohol.volume,
-          category: 'Non-Alcoholic Drink'
+          category: 'Drink bezalkoholowy'
         })
       })
     }
@@ -895,43 +898,43 @@ function exportToExcel() {
   // Prepare data for export
   const data = [
     // Guest Information
-    [{ [t('app.guestInfo')]: '' }],
-    [t('app.fields.alcoholicBeerDrinkers'), guestInfo.alcoholicBeerDrinkers],
-    [t('app.fields.nonAlcoholicBeerDrinkers'), guestInfo.nonAlcoholicBeerDrinkers],
-    [t('app.fields.alcoholicDrinkers'), guestInfo.alcoholicDrinkers],
-    [t('app.fields.nonAlcoholicDrinkers'), guestInfo.nonAlcoholicDrinkers],
+    [{ 'Informacje o Gościach': '' }],
+    ['Pijący Piwo Alkoholowe', guestInfo.alcoholicBeerDrinkers],
+    ['Pijący Piwo Bezalkoholowe', guestInfo.nonAlcoholicBeerDrinkers],
+    ['Pijący Drinki Alkoholowe', guestInfo.alcoholicDrinkers],
+    ['Pijący Drinki Bezalkoholowe', guestInfo.nonAlcoholicDrinkers],
     [], // Empty row
 
     // Consumption
-    [{ [t('app.consumption')]: '' }],
-    [t('app.fields.alcoholicBeer'), `${consumption.alcoholicBeerPerPerson} ml`],
-    [t('app.fields.nonAlcoholicBeer'), `${consumption.nonAlcoholicBeerPerPerson} ml`],
-    [t('app.fields.alcoholicDrinks'), consumption.alcoholicDrinksPerPerson],
-    [t('app.fields.nonAlcoholicDrinks'), consumption.nonAlcoholicDrinksPerPerson],
+    [{ 'Średnie Spożycie': '' }],
+    ['Piwo Alkoholowe (ml)', `${consumption.alcoholicBeerPerPerson} ml`],
+    ['Piwo Bezalkoholowe (ml)', `${consumption.nonAlcoholicBeerPerPerson} ml`],
+    ['Drinki Alkoholowe (ilość)', consumption.alcoholicDrinksPerPerson],
+    ['Drinki Bezalkoholowe (ilość)', consumption.nonAlcoholicDrinksPerPerson],
     [], // Empty row
 
     // Alcohol Types
-    [{ [t('app.alcoholTypes')]: '' }],
-    [t('app.fields.category'), t('app.fields.name'), t('app.fields.volume')],
+    [{ 'Rodzaje Alkoholu': '' }],
+    ['Kategoria', 'Nazwa', 'Objętość (ml)'],
     ...alcoholTypes.value.map(alcohol => [
-      t(`app.categories.${alcohol.category}`),
+      alcohol.category === 'alcoholicBeer' ? 'Piwo alkoholowe' : alcohol.category === 'nonAlcoholicBeer' ? 'Piwo bezalkoholowe' : alcohol.category === 'alcoholicDrink' ? 'Drink alkoholowy' : 'Drink bezalkoholowy',
       alcohol.name,
       `${alcohol.volume} ml`
     ]),
     [], // Empty row
 
     // Drink Types
-    [{ [t('app.drinkTypes')]: '' }],
+    [{ 'Rodzaje Drinków': '' }],
     ...drinkTypes.value.flatMap(drink => [
       [{ [drink.name]: '' }],
-      [t('app.fields.alcohol'), t('app.fields.volume')],
+      ['Alkohol', 'Objętość (ml)'],
       ...drink.ingredients.map(ing => [ing.alcohol, `${ing.volume} ml`]),
       [] // Empty row after each drink
     ]),
 
     // Results
-    [{ [t('app.results')]: '' }],
-    [t('app.type'), t('app.quantity'), t('app.totalVolume')],
+    [{ 'Zalecane Ilości': '' }],
+    ['Rodzaj', 'Ilość', 'Całkowita Objętość (ml)'],
     ...results.value.map(result => [
       result.type,
       result.quantity,
@@ -962,7 +965,7 @@ function printResults() {
     <!DOCTYPE html>
     <html>
       <head>
-        <title>${t('app.title')}</title>
+        <title>Kalkulator Alkoholu na Wesele</title>
         <style>
           body {
             font-family: Arial, sans-serif;
