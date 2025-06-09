@@ -540,7 +540,13 @@
           </thead>
           <tbody>
             <tr v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index">
-              <td>{{ t(`app.categories.${alcohol.category}`) }}</td>
+              <td>
+                <template v-if="alcohol.category === 'alcoholicBeer'">Piwo alkoholowe</template>
+                <template v-else-if="alcohol.category === 'nonAlcoholicBeer'">Piwo bezalkoholowe</template>
+                <template v-else-if="alcohol.category === 'alcoholicDrink'">Drink alkoholowy</template>
+                <template v-else-if="alcohol.category === 'nonAlcoholicDrink'">Drink bezalkoholowy</template>
+                <template v-else></template>
+              </td>
               <td>{{ alcohol.name }}</td>
               <td>{{ alcohol.volume }} ml</td>
             </tr>

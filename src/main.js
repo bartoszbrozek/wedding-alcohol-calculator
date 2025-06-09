@@ -10,7 +10,7 @@ import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 
 // i18n
-import i18n from './i18n'
+// import i18n from './i18n' // Commented out
 
 const vuetify = createVuetify({
   components,
@@ -25,7 +25,7 @@ const app = createApp(App)
 
 // Use plugins
 app.use(vuetify)
-app.use(i18n)
+// app.use(i18n) // Commented out
 
 // Mount the app
 app.mount('#app')

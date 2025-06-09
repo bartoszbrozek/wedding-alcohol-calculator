@@ -17,4 +17,4 @@ const i18n = createI18n({
   fallbackWarn: false
 })
 
-export default i18n 
+export default i18n 3
