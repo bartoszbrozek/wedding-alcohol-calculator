@@ -26,7 +26,7 @@
                 variant="text"
                 size="small"
                 prepend-icon="mdi-dice-multiple"
-                @click="randomizeForm"
+                @click="showRandomizeDialog = true"
                 class="me-2"
               >
                 {{ $t('app.randomize') }}
@@ -64,6 +64,34 @@
                   @click="clearForm"
                 >
                   {{ $t('app.clear') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="showRandomizeDialog" max-width="400">
+            <v-card>
+              <v-card-title class="text-h5">
+                {{ $t('app.randomizeTitle') }}
+              </v-card-title>
+              <v-card-text>
+                {{ $t('app.randomizeMessage') }}
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="grey-darken-1"
+                  variant="text"
+                  @click="showRandomizeDialog = false"
+                >
+                  {{ $t('app.cancel') }}
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  variant="text"
+                  @click="confirmRandomize"
+                >
+                  {{ $t('app.randomize') }}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -992,6 +1020,7 @@ function printResults() {
 }
 
 const showClearDialog = ref(false)
+const showRandomizeDialog = ref(false)
 
 function confirmClearForm() {
   showClearDialog.value = true
@@ -1030,6 +1059,11 @@ function clearForm() {
 
   // Clear saved data
   localStorage.removeItem('weddingCalculatorData')
+}
+
+function confirmRandomize() {
+  showRandomizeDialog.value = false
+  randomizeForm()
 }
 
 function randomizeForm() {
@@ -1132,4 +1166,32 @@ function randomizeForm() {
   // Trigger calculation
   calculateQuantities()
 }
+
+// Add after the existing watch function:
+watch(
+  alcoholTypes,
+  (newTypes) => {
+    // Get current alcohol names
+    const currentAlcoholNames = newTypes.map(type => type.name)
+
+    // Update drink types to remove ingredients with removed alcohols
+    drinkTypes.value = drinkTypes.value.map(drink => {
+      // Filter out ingredients that reference non-existent alcohols
+      const validIngredients = drink.ingredients.filter(ing => 
+        currentAlcoholNames.includes(ing.alcohol)
+      )
+
+      // If all ingredients were removed, add an empty one
+      if (validIngredients.length === 0) {
+        validIngredients.push({ alcohol: '', volume: null })
+      }
+
+      return {
+        ...drink,
+        ingredients: validIngredients
+      }
+    })
+  },
+  { deep: true }
+)
 </script>

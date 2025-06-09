@@ -25,6 +25,8 @@ const messages = {
       clear: 'Clear',
       cancel: 'Cancel',
       randomize: 'Randomize',
+      randomizeTitle: 'Randomize Form',
+      randomizeMessage: 'Are you sure you want to randomize all form data? This will replace all current values with random ones.',
       fields: {
         alcoholicBeerDrinkers: 'Alcoholic Beer Drinkers',
         nonAlcoholicBeerDrinkers: 'Non-Alcoholic Beer Drinkers',
@@ -72,6 +74,8 @@ const messages = {
       clear: 'Wyczyść',
       cancel: 'Anuluj',
       randomize: 'Losuj',
+      randomizeTitle: 'Losuj Dane Formularza',
+      randomizeMessage: 'Czy na pewno chcesz wylosować wszystkie dane formularza? To zastąpi wszystkie obecne wartości losowymi.',
       fields: {
         alcoholicBeerDrinkers: 'Pijący Piwo Alkoholowe',
         nonAlcoholicBeerDrinkers: 'Pijący Piwo Bezalkoholowe',
