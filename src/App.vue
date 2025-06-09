@@ -425,6 +425,13 @@
         </v-card>
       </v-container>
     </v-main>
+    <v-footer app class="bg-grey-lighten-3">
+      <v-row justify="center" no-gutters>
+        <v-col class="text-center" cols="12">
+          <span class="text-caption">Created by bb</span>
+        </v-col>
+      </v-row>
+    </v-footer>
 
     <!-- Print template -->
     <div v-show="false" ref="printTemplate">

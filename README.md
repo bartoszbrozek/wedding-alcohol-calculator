@@ -1,28 +1,45 @@
-# Wedding Alcohol Calculator
+# Wedding Drink Calculator
 
-A Vue 3 application that helps calculate the required quantities of alcohol and drinks for a wedding based on the number of guests and their drinking preferences.
+A comprehensive web application for calculating the perfect amount of drinks needed for a wedding or any large event. Plan your alcoholic and non-alcoholic beverages with precision.
 
 ## Features
 
-- Calculate required quantities of different types of alcohol
-- Support for both direct consumption (beer) and mixed drinks
-- Automatic data persistence using localStorage
-- Responsive design
-- Real-time calculations
+- Calculate quantities for different types of drinks:
+  - Alcoholic beer
+  - Non-alcoholic beer
+  - Alcoholic drinks (spirits, cocktails)
+  - Non-alcoholic drinks
+- Support for custom drink recipes with multiple ingredients
+- Automatic calculation of bottle quantities based on standard sizes
+- Export results to Excel
+- Print-friendly results
+- Multi-language support (English and Polish)
+- Responsive design for all devices
+- SEO optimized
 
-## Development
+## Technologies Used
+
+- Vue 3
+- Vuetify 3
+- Vue I18n for internationalization
+- Vitest for testing
+- Vue Test Utils
+- XLSX for Excel export
+- FileSaver for file downloads
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (version 16 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
 
-### Setup
+### Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd wedding-alcohol-calculator
+git clone https://github.com/yourusername/wedding-drink-calculator.git
+cd wedding-drink-calculator
 ```
 
 2. Install dependencies:
@@ -39,72 +56,91 @@ npm run dev
 yarn dev
 ```
 
-The application will be available at `http://localhost:5173` (or another port if 5173 is in use).
+## Testing
 
-### Development Features
+The project uses Vitest for testing. Run the tests with:
 
-- Hot Module Replacement (HMR)
-- Vue DevTools support
-- ESLint for code quality
-- Automatic data saving to localStorage
-
-## Production Build
-
-To create a production build:
-
-1. Build the application:
 ```bash
-npm run build
+npm run test
 # or
-yarn build
+yarn test
 ```
 
-2. The production files will be generated in the `dist` directory.
+### Test Categories
 
-3. To preview the production build locally:
-```bash
-npm run preview
-# or
-yarn preview
-```
+1. **Beer Calculations**
+   - Alcoholic beer quantity calculations
+   - Distribution across multiple beer types
 
-### Deploying to Production
+2. **Drink Calculations**
+   - Alcoholic drink quantities
+   - Multiple ingredients in drinks
 
-The `dist` directory contains all the files needed for production deployment. You can deploy these files to any static file hosting service like:
+3. **Mixed Consumption**
+   - Combined beer and drink calculations
+   - Mixed alcoholic and non-alcoholic consumption
 
-- GitHub Pages
-- Netlify
-- Vercel
-- Any web server
+4. **Simple Scenarios**
+   - Single drink type calculations
+   - Basic use cases
 
-## Project Structure
+5. **Complex Drink Scenarios**
+   - Complex cocktails with multiple ingredients
+   - Multiple drink types with shared ingredients
 
-```
-wedding-alcohol-calculator/
-├── src/
-│   ├── App.vue          # Main application component
-│   └── main.js          # Application entry point
-├── public/              # Static assets
-├── index.html           # HTML template
-├── package.json         # Project dependencies and scripts
-├── vite.config.js       # Vite configuration
-└── README.md           # This file
-```
+6. **Edge Cases**
+   - Zero consumption
+   - Very small bottle sizes
+   - Very large consumption values
 
-## Data Persistence
+7. **Form Validation**
+   - Required fields
+   - Positive number validation
 
-The application automatically saves all data to the browser's localStorage. This means:
-- Your data persists between page reloads
-- Data is saved automatically when you make changes
-- No server-side storage is required
+## Usage
 
-## Browser Support
+1. Enter the number of guests in each category:
+   - Alcoholic beer drinkers
+   - Non-alcoholic beer drinkers
+   - Alcoholic drink consumers
+   - Non-alcoholic drink consumers
 
-The application works in all modern browsers that support:
-- ES6+ JavaScript
-- LocalStorage
-- CSS Grid and Flexbox
+2. Set consumption per person:
+   - Beer consumption (ml)
+   - Number of drinks per person
+
+3. Add alcohol types:
+   - Name
+   - Volume
+   - Category (alcoholic/non-alcoholic beer, alcoholic/non-alcoholic drink)
+
+4. Create custom drinks (optional):
+   - Name
+   - Ingredients with volumes
+
+5. Calculate quantities:
+   - View results in the table
+   - Export to Excel
+   - Print results
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Author
+
+- bb
 
 ## License
 
-MIT 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Vuetify for the beautiful UI components
+- Vue.js team for the amazing framework
+- All contributors and users of the application 
