@@ -1,111 +1,306 @@
 <template>
-  <div class="container">
-    <h1>Wedding Alcohol Calculator</h1>
-    
-    <form @submit.prevent="calculateQuantities">
-      <div class="form-section">
-        <h2>Guest Information</h2>
-        <div class="form-group">
-          <label for="alcoholicBeerDrinkers">Number of Alcoholic Beer Drinkers:</label>
-          <input type="number" id="alcoholicBeerDrinkers" v-model.number="guestInfo.alcoholicBeerDrinkers" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="nonAlcoholicBeerDrinkers">Number of Non-Alcoholic Beer Drinkers:</label>
-          <input type="number" id="nonAlcoholicBeerDrinkers" v-model.number="guestInfo.nonAlcoholicBeerDrinkers" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="alcoholicDrinkers">Number of Alcoholic Drink Drinkers:</label>
-          <input type="number" id="alcoholicDrinkers" v-model.number="guestInfo.alcoholicDrinkers" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="nonAlcoholicDrinkers">Number of Non-Alcoholic Drink Drinkers:</label>
-          <input type="number" id="nonAlcoholicDrinkers" v-model.number="guestInfo.nonAlcoholicDrinkers" required min="0">
-        </div>
-      </div>
+  <v-app>
+    <v-main>
+      <v-container>
+        <v-card class="mx-auto" max-width="1200">
+          <v-card-title class="text-h4 text-center py-4">
+            Wedding Alcohol Calculator
+          </v-card-title>
 
-      <div class="form-section">
-        <h2>Average Consumption (ml per person)</h2>
-        <div class="form-group">
-          <label for="alcoholicBeerPerPerson">Alcoholic Beer:</label>
-          <input type="number" id="alcoholicBeerPerPerson" v-model.number="consumption.alcoholicBeerPerPerson" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="nonAlcoholicBeerPerPerson">Non-Alcoholic Beer:</label>
-          <input type="number" id="nonAlcoholicBeerPerPerson" v-model.number="consumption.nonAlcoholicBeerPerPerson" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="alcoholicDrinksPerPerson">Alcoholic Drinks:</label>
-          <input type="number" id="alcoholicDrinksPerPerson" v-model.number="consumption.alcoholicDrinksPerPerson" required min="0">
-        </div>
-        <div class="form-group">
-          <label for="nonAlcoholicDrinksPerPerson">Non-Alcoholic Drinks:</label>
-          <input type="number" id="nonAlcoholicDrinksPerPerson" v-model.number="consumption.nonAlcoholicDrinksPerPerson" required min="0">
-        </div>
-      </div>
+          <v-card-text>
+            <v-form @submit.prevent="calculateQuantities" v-model="isFormValid">
+              <v-card class="mb-4">
+                <v-card-title>Guest Information</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="guestInfo.alcoholicBeerDrinkers"
+                        label="Number of Alcoholic Beer Drinkers"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="guestInfo.nonAlcoholicBeerDrinkers"
+                        label="Number of Non-Alcoholic Beer Drinkers"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="guestInfo.alcoholicDrinkers"
+                        label="Number of Alcoholic Drink Drinkers"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="guestInfo.nonAlcoholicDrinkers"
+                        label="Number of Non-Alcoholic Drink Drinkers"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
 
-      <div class="form-section">
-        <h2>Alcohol Types</h2>
-        <div v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index" class="alcohol-type">
-          <select v-model="alcohol.category" class="alcohol-category">
-            <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-          <input type="text" v-model="alcohol.name" placeholder="Name (e.g., Tyskie)" class="alcohol-name">
-          <input type="number" v-model.number="alcohol.volume" placeholder="Volume (ml)" class="alcohol-volume">
-          <button type="button" class="remove-btn" @click="removeAlcoholType(index)">Remove</button>
-        </div>
-        <button type="button" @click="addAlcoholType" class="add-btn">Add Alcohol Type</button>
-      </div>
+              <v-card class="mb-4">
+                <v-card-title>Average Consumption (ml per person)</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="consumption.alcoholicBeerPerPerson"
+                        label="Alcoholic Beer"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="consumption.nonAlcoholicBeerPerPerson"
+                        label="Non-Alcoholic Beer"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="consumption.alcoholicDrinksPerPerson"
+                        label="Alcoholic Drinks"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="3">
+                      <v-text-field
+                        v-model.number="consumption.nonAlcoholicDrinksPerPerson"
+                        label="Non-Alcoholic Drinks"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
 
-      <div class="form-section">
-        <h2>Drink Types</h2>
-        <div v-for="(drink, index) in drinkTypes" :key="'drink-' + index" class="drink-type">
-          <input type="text" v-model="drink.name" placeholder="Name (e.g., Whisky Sour)" class="drink-name">
-          <div class="drink-ingredients">
-            <div v-for="(ingredient, ingIndex) in drink.ingredients" :key="'ingredient-' + ingIndex" class="drink-ingredient">
-              <select v-model="ingredient.alcohol" class="alcohol-select">
-                <option v-for="alcohol in nonBeerAlcoholTypes" :key="alcohol.name" :value="alcohol.name">
-                  {{ alcohol.name }} ({{ alcohol.volume }}ml)
-                </option>
-              </select>
-              <input type="number" v-model.number="ingredient.volume" placeholder="Volume (ml)" class="ingredient-volume">
-              <button type="button" class="remove-btn" @click="removeIngredient(index, ingIndex)">Remove</button>
-            </div>
-            <button type="button" @click="addIngredient(index)" class="add-ingredient-btn">Add Ingredient</button>
-          </div>
-          <button type="button" class="remove-btn" @click="removeDrinkType(index)">Remove</button>
-        </div>
-        <button type="button" @click="addDrinkType" class="add-btn">Add Drink Type</button>
-      </div>
+              <v-card class="mb-4">
+                <v-card-title>Alcohol Types</v-card-title>
+                <v-card-text>
+                  <v-row v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index">
+                    <v-col cols="12" sm="3">
+                      <v-select
+                        v-model="alcohol.category"
+                        :items="categoryOptions"
+                        item-title="label"
+                        item-value="value"
+                        label="Category"
+                        :rules="[rules.required]"
+                        required
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                        v-model="alcohol.name"
+                        label="Name"
+                        :rules="[rules.required]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-text-field
+                        v-model.number="alcohol.volume"
+                        label="Volume (ml)"
+                        type="number"
+                        :rules="[rules.required, rules.positive]"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="2" class="d-flex align-center">
+                      <v-btn
+                        color="error"
+                        icon
+                        @click="removeAlcoholType(index)"
+                        :disabled="alcoholTypes.length === 1"
+                      >
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-btn
+                    color="primary"
+                    @click="addAlcoholType"
+                    class="mt-2"
+                  >
+                    Add Alcohol Type
+                  </v-btn>
+                </v-card-text>
+              </v-card>
 
-      <button type="submit" class="calculate-btn">Calculate</button>
-    </form>
+              <v-card class="mb-4">
+                <v-card-title>Drink Types</v-card-title>
+                <v-card-text>
+                  <v-card
+                    v-for="(drink, index) in drinkTypes"
+                    :key="'drink-' + index"
+                    class="mb-4"
+                    variant="outlined"
+                  >
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="12" sm="4">
+                          <v-text-field
+                            v-model="drink.name"
+                            label="Drink Name"
+                            :rules="[rules.required]"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="2" class="d-flex align-center">
+                          <v-btn
+                            color="error"
+                            icon
+                            @click="removeDrinkType(index)"
+                            :disabled="drinkTypes.length === 1"
+                          >
+                            <v-icon>mdi-delete</v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
 
-    <div v-if="showResults" class="results">
-      <h2>Recommended Quantities</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Quantity</th>
-            <th>Total Volume (ml)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(result, index) in results" :key="index">
-            <td>{{ result.type }}</td>
-            <td>{{ result.quantity }}</td>
-            <td>{{ result.totalVolume }} ml</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+                      <v-card
+                        v-for="(ingredient, ingIndex) in drink.ingredients"
+                        :key="'ingredient-' + ingIndex"
+                        class="mb-2"
+                        variant="outlined"
+                      >
+                        <v-card-text>
+                          <v-row>
+                            <v-col cols="12" sm="5">
+                              <v-select
+                                v-model="ingredient.alcohol"
+                                :items="nonBeerAlcoholTypes"
+                                item-title="name"
+                                item-value="name"
+                                label="Alcohol"
+                                :rules="[rules.required]"
+                                required
+                              >
+                                <template v-slot:item="{ props, item }">
+                                  <v-list-item v-bind="props">
+                                    <v-list-item-title>
+                                      {{ item.raw.name }} ({{ item.raw.volume }}ml)
+                                    </v-list-item-title>
+                                  </v-list-item>
+                                </template>
+                              </v-select>
+                            </v-col>
+                            <v-col cols="12" sm="5">
+                              <v-text-field
+                                v-model.number="ingredient.volume"
+                                label="Volume (ml)"
+                                type="number"
+                                :rules="[rules.required, rules.positive]"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="2" class="d-flex align-center">
+                              <v-btn
+                                color="error"
+                                icon
+                                @click="removeIngredient(index, ingIndex)"
+                                :disabled="drink.ingredients.length === 1"
+                              >
+                                <v-icon>mdi-delete</v-icon>
+                              </v-btn>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </v-card>
+
+                      <v-btn
+                        color="primary"
+                        @click="addIngredient(index)"
+                        class="mt-2"
+                      >
+                        Add Ingredient
+                      </v-btn>
+                    </v-card-text>
+                  </v-card>
+
+                  <v-btn
+                    color="primary"
+                    @click="addDrinkType"
+                    class="mt-2"
+                  >
+                    Add Drink Type
+                  </v-btn>
+                </v-card-text>
+              </v-card>
+
+              <v-btn
+                color="primary"
+                type="submit"
+                block
+                :disabled="!isFormValid"
+                class="mt-4"
+              >
+                Calculate
+              </v-btn>
+            </v-form>
+          </v-card-text>
+
+          <v-card-text v-if="showResults">
+            <v-card>
+              <v-card-title>Recommended Quantities</v-card-title>
+              <v-card-text>
+                <v-table>
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Quantity</th>
+                      <th>Total Volume (ml)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(result, index) in results" :key="index">
+                      <td>{{ result.type }}</td>
+                      <td>{{ result.quantity }}</td>
+                      <td>{{ result.totalVolume }} ml</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </v-card-text>
+            </v-card>
+          </v-card-text>
+        </v-card>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
+
+const isFormValid = ref(false)
+
+const rules = {
+  required: v => !!v || 'This field is required',
+  positive: v => v > 0 || 'Value must be greater than 0'
+}
 
 const guestInfo = reactive({
   alcoholicBeerDrinkers: 50,
