@@ -56,6 +56,60 @@ npm run dev
 yarn dev
 ```
 
+## Building for Production
+
+To create a production build:
+
+1. Build the application:
+```bash
+npm run build
+# or
+yarn build
+```
+
+2. The production files will be generated in the `dist` directory.
+
+3. To preview the production build locally:
+```bash
+npm run preview
+# or
+yarn preview
+```
+
+### Production Deployment
+
+The `dist` directory contains all the files needed for production deployment. You can deploy these files to any static file hosting service like:
+
+- GitHub Pages
+- Netlify
+- Vercel
+- Any web server
+
+For example, to deploy to GitHub Pages:
+
+1. Add the following to your `package.json`:
+```json
+{
+  "scripts": {
+    "deploy": "gh-pages -d dist"
+  }
+}
+```
+
+2. Install gh-pages:
+```bash
+npm install --save-dev gh-pages
+# or
+yarn add -D gh-pages
+```
+
+3. Deploy:
+```bash
+npm run deploy
+# or
+yarn deploy
+```
+
 ## Testing
 
 The project uses Vitest for testing. Run the tests with:
