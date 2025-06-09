@@ -40,7 +40,9 @@ const messages = {
         name: 'Name',
         volume: 'Volume (ml)',
         drinkName: 'Drink Name',
-        alcohol: 'Alcohol'
+        alcohol: 'Alcohol',
+        required: 'Required field',
+        positive: 'Value must be greater than 0'
       },
       categories: {
         alcoholicBeer: 'Alcoholic Beer',
@@ -109,7 +111,11 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages,
   runtimeOnly: false,
-  globalInjection: true
+  globalInjection: true,
+  silentTranslationWarn: true,
+  silentFallbackWarn: true,
+  missingWarn: false,
+  fallbackWarn: false
 })
 
 export default i18n 

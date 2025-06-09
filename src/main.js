@@ -20,7 +20,7 @@ const vuetify = createVuetify({
   }
 })
 
-createApp(App)
-  .use(vuetify)
-  .use(i18n)
-  .mount('#app')
+const app = createApp(App)
+app.use(vuetify)
+app.use(i18n)
+app.mount('#app')
