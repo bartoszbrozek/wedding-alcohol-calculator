@@ -105,9 +105,11 @@ const messages = {
 
 const i18n = createI18n({
   legacy: false,
-  locale: navigator.language.split('-')[0] || 'en',
+  locale: 'en',
   fallbackLocale: 'en',
-  messages
+  messages,
+  runtimeOnly: false,
+  globalInjection: true
 })
 
 export default i18n 
