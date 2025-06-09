@@ -214,7 +214,7 @@
                     elevation="0"
                     bg-color="grey-lighten-4"
                   >
-                    <v-card-text>
+                    <v-card-text class="pa-0">
                       <v-row>
                         <v-col cols="12" sm="4">
                           <v-text-field
@@ -247,7 +247,7 @@
                         elevation="0"
                         bg-color="white"
                       >
-                        <v-card-text>
+                        <v-card-text class="pa-0 pt-2">
                           <v-row>
                             <v-col cols="12" sm="5">
                               <v-select
@@ -596,8 +596,6 @@ watch(
 // Load data when component is mounted
 onMounted(() => {
   loadData()
-  if (isFormValid.value) {
-    calculateQuantities()
-  }
+  calculateQuantities()
 })
 </script>
