@@ -316,6 +316,19 @@
             </v-form>
           </v-card-text>
 
+          <v-card-text v-if="!isFormValid" class="pa-6">
+            <v-alert
+              type="warning"
+              variant="tonal"
+              class="mb-0"
+            >
+              <template v-slot:prepend>
+                <v-icon>mdi-alert</v-icon>
+              </template>
+              Please fill in all required fields with valid values to see the results.
+            </v-alert>
+          </v-card-text>
+
           <v-card-text v-if="isFormValid && results.length > 0" class="pa-6">
             <v-card elevation="1">
               <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white">
