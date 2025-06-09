@@ -12,14 +12,14 @@ const i18n = createI18n({
     pl
   },
   // Force runtime-only mode for all environments
-  runtimeOnly: true,
+  runtimeOnly: false,
   // Enable global injection
   globalInjection: true,
   // Disable warnings
-  silentTranslationWarn: true,
-  silentFallbackWarn: true,
-  missingWarn: false,
-  fallbackWarn: false,
+  silentTranslationWarn: false,
+  silentFallbackWarn: false,
+  missingWarn: true,
+  fallbackWarn: true,
   // Enable composition API
   allowComposition: true,
   // Enable sync mode
