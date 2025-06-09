@@ -3,7 +3,12 @@
     <v-main class="bg-grey-lighten-4">
       <v-container class="py-8">
         <v-card class="mx-auto" max-width="1000" elevation="2">
-          <v-card-title class="text-h4 text-center py-6 bg-primary text-white d-flex justify-space-between align-center">
+          <v-card-title class="text-h4 text-center py-4">
+            <v-img
+              src="/assets/logo.png"
+              max-width="50"
+              class="mx-auto mb-2"
+            ></v-img>
             {{ $t('app.title') }}
             <div class="d-flex align-center">
               <v-btn
