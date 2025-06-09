@@ -15,5 +15,8 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['vue-i18n']
+  },
+  resolve: {
+    dedupe: ['vue', 'vue-i18n']
   }
 })
