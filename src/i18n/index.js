@@ -89,13 +89,15 @@ const messages = {
         name: 'Nazwa',
         volume: 'Objętość (ml)',
         drinkName: 'Nazwa Drinka',
-        alcohol: 'Alkohol'
+        alcohol: 'Alkohol',
+        required: 'Pole wymagane',
+        positive: 'Wartość musi być większa od 0'
       },
       categories: {
-        alcoholicBeer: 'Piwo Alkoholowe',
-        nonAlcoholicBeer: 'Piwo Bezalkoholowe',
-        alcoholicDrink: 'Drink Alkoholowy',
-        nonAlcoholicDrink: 'Drink Bezalkoholowy'
+        alcoholicBeer: 'Piwo alkoholowe',
+        nonAlcoholicBeer: 'Piwo bezalkoholowe',
+        alcoholicDrink: 'Drink alkoholowy',
+        nonAlcoholicDrink: 'Drink bezalkoholowy'
       }
     }
   }

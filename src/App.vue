@@ -627,7 +627,7 @@ const consumption = reactive({
 const alcoholTypes = ref([{
   name: '',
   volume: null,
-  category: 'alcoholic_beer'
+  category: 'alcoholicBeer'
 }])
 
 const drinkTypes = ref([{
@@ -639,17 +639,17 @@ const showResults = ref(false)
 const results = ref([])
 
 const categoryOptions = computed(() => [
-  { value: 'alcoholic_beer', label: t('app.categories.alcoholicBeer') },
-  { value: 'non_alcoholic_beer', label: t('app.categories.nonAlcoholicBeer') },
-  { value: 'alcoholic_drink', label: t('app.categories.alcoholicDrink') },
-  { value: 'non_alcoholic_drink', label: t('app.categories.nonAlcoholicDrink') }
+  { value: 'alcoholicBeer', label: t('app.categories.alcoholicBeer') },
+  { value: 'nonAlcoholicBeer', label: t('app.categories.nonAlcoholicBeer') },
+  { value: 'alcoholicDrink', label: t('app.categories.alcoholicDrink') },
+  { value: 'nonAlcoholicDrink', label: t('app.categories.nonAlcoholicDrink') }
 ])
 
 // Add computed property to filter out beer types
 const nonBeerAlcoholTypes = computed(() => {
   return alcoholTypes.value.filter(alcohol => 
-    alcohol.category !== 'alcoholic_beer' && 
-    alcohol.category !== 'non_alcoholic_beer' &&
+    alcohol.category !== 'alcoholicBeer' && 
+    alcohol.category !== 'nonAlcoholicBeer' &&
     alcohol.name && 
     alcohol.volume
   )
@@ -659,7 +659,7 @@ function addAlcoholType() {
   alcoholTypes.value.push({
     name: '',
     volume: null,
-    category: 'alcoholic_beer'
+    category: 'alcoholicBeer'
   })
 }
 
@@ -698,10 +698,10 @@ function calculateQuantities() {
   const totalNonAlcoholicBeerVolume = guestInfo.nonAlcoholicBeerDrinkers * consumption.nonAlcoholicBeerPerPerson
 
   // Get alcohol types by category
-  const alcoholicBeers = alcoholTypes.value.filter(a => a.category === 'alcoholic_beer' && a.name && a.volume)
-  const nonAlcoholicBeers = alcoholTypes.value.filter(a => a.category === 'non_alcoholic_beer' && a.name && a.volume)
-  const alcoholicDrinks = alcoholTypes.value.filter(a => a.category === 'alcoholic_drink' && a.name && a.volume)
-  const nonAlcoholicDrinks = alcoholTypes.value.filter(a => a.category === 'non_alcoholic_drink' && a.name && a.volume)
+  const alcoholicBeers = alcoholTypes.value.filter(a => a.category === 'alcoholicBeer' && a.name && a.volume)
+  const nonAlcoholicBeers = alcoholTypes.value.filter(a => a.category === 'nonAlcoholicBeer' && a.name && a.volume)
+  const alcoholicDrinks = alcoholTypes.value.filter(a => a.category === 'alcoholicDrink' && a.name && a.volume)
+  const nonAlcoholicDrinks = alcoholTypes.value.filter(a => a.category === 'nonAlcoholicDrink' && a.name && a.volume)
 
   if (totalAlcoholicBeerVolume > 0 && alcoholicBeers.length > 0) {
     const volumePerType = totalAlcoholicBeerVolume / alcoholicBeers.length
@@ -751,15 +751,15 @@ function calculateQuantities() {
           let totalIngredientVolume = 0
           
           // For alcoholic ingredients, use alcoholic drinkers
-          if (alcoholType.category === 'alcoholic_drink') {
+          if (alcoholType.category === 'alcoholicDrink') {
             totalIngredientVolume = alcoholicDrinksPerType * ingredient.volume
           }
           // For non-alcoholic ingredients in mixed drinks, only use alcoholic drinkers
-          else if (alcoholType.category === 'non_alcoholic_drink') {
+          else if (alcoholType.category === 'nonAlcoholicDrink') {
             // If this is part of a mixed drink (has both alcoholic and non-alcoholic ingredients)
             const isMixedDrink = drink.ingredients.some(ing => {
               const ingType = alcoholTypes.value.find(a => a.name === ing.alcohol)
-              return ingType && ingType.category === 'alcoholic_drink'
+              return ingType && ingType.category === 'alcoholicDrink'
             })
             
             if (isMixedDrink) {
@@ -783,7 +783,7 @@ function calculateQuantities() {
               alcoholQuantities.set(alcoholType.name, {
                 quantity: ingredientQuantity,
                 totalVolume: ingredientQuantity * alcoholType.volume,
-                category: alcoholType.category === 'non_alcoholic_drink' ? 'Non-Alcoholic Drink' : 'Alcoholic Drink'
+                category: alcoholType.category === 'nonAlcoholicDrink' ? 'Non-Alcoholic Drink' : 'Alcoholic Drink'
               })
             }
           }
@@ -1039,7 +1039,7 @@ function clearForm() {
   alcoholTypes.value = [{
     name: '',
     volume: null,
-    category: 'alcoholic_beer'
+    category: 'alcoholicBeer'
   }]
 
   // Reset drink types
@@ -1111,19 +1111,19 @@ function randomizeForm() {
   alcoholTypes.value = [
     ...beerTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
       ...type,
-      category: 'alcoholic_beer'
+      category: 'alcoholicBeer'
     })),
     ...nonAlcoholicBeerTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 1).map(type => ({
       ...type,
-      category: 'non_alcoholic_beer'
+      category: 'nonAlcoholicBeer'
     })),
     ...spiritTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
       ...type,
-      category: 'alcoholic_drink'
+      category: 'alcoholicDrink'
     })),
     ...nonAlcoholicTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
       ...type,
-      category: 'non_alcoholic_drink'
+      category: 'nonAlcoholicDrink'
     }))
   ]
 
@@ -1149,7 +1149,7 @@ function randomizeForm() {
       name: drinkName,
       ingredients: Array(numIngredients).fill(null).map(() => {
         const availableAlcohols = alcoholTypes.value.filter(a => 
-          a.category === 'alcoholic_drink' || a.category === 'non_alcoholic_drink'
+          a.category === 'alcoholicDrink' || a.category === 'nonAlcoholicDrink'
         )
         const randomAlcohol = availableAlcohols[Math.floor(Math.random() * availableAlcohols.length)]
         

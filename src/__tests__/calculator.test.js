@@ -38,7 +38,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Test Beer',
         volume: 500,
-        category: 'alcoholic_beer'
+        category: 'alcoholicBeer'
       }]
 
       // Trigger calculation
@@ -67,12 +67,12 @@ describe('Wedding Calculator', () => {
         {
           name: 'Beer A',
           volume: 500,
-          category: 'alcoholic_beer'
+          category: 'alcoholicBeer'
         },
         {
           name: 'Beer B',
           volume: 330,
-          category: 'alcoholic_beer'
+          category: 'alcoholicBeer'
         }
       ]
 
@@ -106,7 +106,7 @@ describe('Wedding Calculator', () => {
         {
           name: 'Vodka',
           volume: 700,
-          category: 'alcoholic_drink'
+          category: 'alcoholicDrink'
         }
       ]
 
@@ -147,12 +147,12 @@ describe('Wedding Calculator', () => {
         {
           name: 'Vodka',
           volume: 700,
-          category: 'alcoholic_drink'
+          category: 'alcoholicDrink'
         },
         {
           name: 'Orange Juice',
           volume: 1000,
-          category: 'non_alcoholic_drink'
+          category: 'nonAlcoholicDrink'
         }
       ]
 
@@ -203,22 +203,22 @@ describe('Wedding Calculator', () => {
         {
           name: 'Beer',
           volume: 500,
-          category: 'alcoholic_beer'
+          category: 'alcoholicBeer'
         },
         {
           name: 'Non-Alcoholic Beer',
           volume: 500,
-          category: 'non_alcoholic_beer'
+          category: 'nonAlcoholicBeer'
         },
         {
           name: 'Vodka',
           volume: 700,
-          category: 'alcoholic_drink'
+          category: 'alcoholicDrink'
         },
         {
           name: 'Cola',
           volume: 1000,
-          category: 'non_alcoholic_drink'
+          category: 'nonAlcoholicDrink'
         }
       ]
 
@@ -294,7 +294,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Test Beer',
         volume: 500,
-        category: 'alcoholic_beer'
+        category: 'alcoholicBeer'
       }]
 
       await wrapper.vm.calculateQuantities()
@@ -319,7 +319,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Cola',
         volume: 1000,
-        category: 'non_alcoholic_drink'
+        category: 'nonAlcoholicDrink'
       }]
 
       await wrapper.vm.calculateQuantities()
@@ -327,7 +327,7 @@ describe('Wedding Calculator', () => {
       const results = wrapper.vm.results
       expect(results).toHaveLength(1)
       expect(results[0].quantity).toBe(1)
-      expect(results[0].totalVolume).toBe(150) // Standard non-alcoholic drink volume (150ml)
+      expect(results[0].totalVolume).toBe(250) // Standard non-alcoholic drink volume (250ml)
     })
   })
 
@@ -347,17 +347,17 @@ describe('Wedding Calculator', () => {
         {
           name: 'Vodka',
           volume: 700,
-          category: 'alcoholic_drink'
+          category: 'alcoholicDrink'
         },
         {
           name: 'Orange Juice',
           volume: 1000,
-          category: 'non_alcoholic_drink'
+          category: 'nonAlcoholicDrink'
         },
         {
           name: 'Cranberry Juice',
           volume: 1000,
-          category: 'non_alcoholic_drink'
+          category: 'nonAlcoholicDrink'
         }
       ]
 
@@ -413,12 +413,12 @@ describe('Wedding Calculator', () => {
         {
           name: 'Vodka',
           volume: 700,
-          category: 'alcoholic_drink'
+          category: 'alcoholicDrink'
         },
         {
           name: 'Orange Juice',
           volume: 1000,
-          category: 'non_alcoholic_drink'
+          category: 'nonAlcoholicDrink'
         }
       ]
 
@@ -483,7 +483,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Test Beer',
         volume: 500,
-        category: 'alcoholic_beer'
+        category: 'alcoholicBeer'
       }]
 
       await wrapper.vm.calculateQuantities()
@@ -506,7 +506,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Mini Beer',
         volume: 50,
-        category: 'alcoholic_beer'
+        category: 'alcoholicBeer'
       }]
 
       await wrapper.vm.calculateQuantities()
@@ -530,7 +530,7 @@ describe('Wedding Calculator', () => {
       wrapper.vm.alcoholTypes = [{
         name: 'Large Beer',
         volume: 500,
-        category: 'alcoholic_beer'
+        category: 'alcoholicBeer'
       }]
 
       await wrapper.vm.calculateQuantities()
