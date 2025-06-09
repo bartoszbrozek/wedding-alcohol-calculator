@@ -5,7 +5,7 @@
         <v-card class="mx-auto" max-width="1000" elevation="2">
           <v-card-title class="text-h4 text-center py-4">
             <v-img
-              src="/assets/favicon.svg"
+              src="/wedding-alcohol-calculator/assets/favicon.svg"
               max-width="50"
               class="mx-auto mb-2"
             ></v-img>
