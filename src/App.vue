@@ -12,7 +12,7 @@
             {{ $t('app.title') }}
             <div class="d-flex align-center">
               <v-btn
-                color="white"
+                color="primary"
                 variant="text"
                 size="small"
                 prepend-icon="mdi-delete"
@@ -22,7 +22,17 @@
                 {{ $t('app.clearForm') }}
               </v-btn>
               <v-btn
-                color="white"
+                color="primary"
+                variant="text"
+                size="small"
+                prepend-icon="mdi-dice-multiple"
+                @click="randomizeForm"
+                class="me-2"
+              >
+                {{ $t('app.randomize') }}
+              </v-btn>
+              <v-btn
+                color="primary"
                 variant="text"
                 @click="toggleLanguage"
               >
@@ -1020,5 +1030,106 @@ function clearForm() {
 
   // Clear saved data
   localStorage.removeItem('weddingCalculatorData')
+}
+
+function randomizeForm() {
+  // Random guest info (realistic numbers)
+  guestInfo.alcoholicBeerDrinkers = Math.floor(Math.random() * 30) + 30 // 30-60
+  guestInfo.nonAlcoholicBeerDrinkers = Math.floor(Math.random() * 20) + 10 // 10-30
+  guestInfo.alcoholicDrinkers = Math.floor(Math.random() * 40) + 60 // 60-100
+  guestInfo.nonAlcoholicDrinkers = Math.floor(Math.random() * 20) + 20 // 20-40
+
+  // Random consumption (realistic numbers)
+  consumption.alcoholicBeerPerPerson = Math.floor(Math.random() * 500) + 500 // 500-1000ml
+  consumption.nonAlcoholicBeerPerPerson = Math.floor(Math.random() * 300) + 200 // 200-500ml
+  consumption.alcoholicDrinksPerPerson = Math.floor(Math.random() * 2) + 2 // 2-4 drinks
+  consumption.nonAlcoholicDrinksPerPerson = Math.floor(Math.random() * 2) + 1 // 1-3 drinks
+
+  // Random alcohol types
+  const beerTypes = [
+    { name: 'Lager', volume: 500 },
+    { name: 'Pilsner', volume: 500 },
+    { name: 'Wheat Beer', volume: 500 },
+    { name: 'IPA', volume: 500 },
+    { name: 'Stout', volume: 500 }
+  ]
+
+  const nonAlcoholicBeerTypes = [
+    { name: 'Non-Alcoholic Lager', volume: 500 },
+    { name: 'Non-Alcoholic Pilsner', volume: 500 },
+    { name: 'Non-Alcoholic Wheat Beer', volume: 500 }
+  ]
+
+  const spiritTypes = [
+    { name: 'Vodka', volume: 700 },
+    { name: 'Whiskey', volume: 700 },
+    { name: 'Rum', volume: 700 },
+    { name: 'Gin', volume: 700 },
+    { name: 'Tequila', volume: 700 }
+  ]
+
+  const nonAlcoholicTypes = [
+    { name: 'Cola', volume: 1000 },
+    { name: 'Lemonade', volume: 1000 },
+    { name: 'Orange Juice', volume: 1000 },
+    { name: 'Sparkling Water', volume: 1000 }
+  ]
+
+  // Randomly select 2-3 types from each category
+  alcoholTypes.value = [
+    ...beerTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
+      ...type,
+      category: 'alcoholic_beer'
+    })),
+    ...nonAlcoholicBeerTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 1).map(type => ({
+      ...type,
+      category: 'non_alcoholic_beer'
+    })),
+    ...spiritTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
+      ...type,
+      category: 'alcoholic_drink'
+    })),
+    ...nonAlcoholicTypes.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2).map(type => ({
+      ...type,
+      category: 'non_alcoholic_drink'
+    }))
+  ]
+
+  // Random drink types
+  const drinkNames = [
+    'Mojito',
+    'Margarita',
+    'Old Fashioned',
+    'Gin & Tonic',
+    'Vodka & Orange',
+    'Rum & Cola',
+    'Whiskey Sour',
+    'Tequila Sunrise'
+  ]
+
+  // Create 2-4 random drinks
+  const numDrinks = Math.floor(Math.random() * 3) + 2
+  drinkTypes.value = Array(numDrinks).fill(null).map(() => {
+    const drinkName = drinkNames[Math.floor(Math.random() * drinkNames.length)]
+    const numIngredients = Math.floor(Math.random() * 2) + 2 // 2-3 ingredients per drink
+    
+    return {
+      name: drinkName,
+      ingredients: Array(numIngredients).fill(null).map(() => {
+        const availableAlcohols = alcoholTypes.value.filter(a => 
+          a.category === 'alcoholic_drink' || a.category === 'non_alcoholic_drink'
+        )
+        const randomAlcohol = availableAlcohols[Math.floor(Math.random() * availableAlcohols.length)]
+        
+        return {
+          alcohol: randomAlcohol.name,
+          volume: Math.floor(Math.random() * 50) + 30 // 30-80ml per ingredient
+        }
+      })
+    }
+  })
+
+  // Trigger calculation
+  calculateQuantities()
 }
 </script>

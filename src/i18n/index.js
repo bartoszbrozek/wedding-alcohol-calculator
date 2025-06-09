@@ -24,6 +24,7 @@ const messages = {
       clearFormMessage: 'Are you sure you want to clear all form data? This action cannot be undone.',
       clear: 'Clear',
       cancel: 'Cancel',
+      randomize: 'Randomize',
       fields: {
         alcoholicBeerDrinkers: 'Alcoholic Beer Drinkers',
         nonAlcoholicBeerDrinkers: 'Non-Alcoholic Beer Drinkers',
@@ -70,6 +71,7 @@ const messages = {
       clearFormMessage: 'Czy na pewno chcesz wyczyścić wszystkie dane formularza? Tej operacji nie można cofnąć.',
       clear: 'Wyczyść',
       cancel: 'Anuluj',
+      randomize: 'Losuj',
       fields: {
         alcoholicBeerDrinkers: 'Pijący Piwo Alkoholowe',
         nonAlcoholicBeerDrinkers: 'Pijący Piwo Bezalkoholowe',
