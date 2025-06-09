@@ -135,10 +135,6 @@ yarn test
 
 - bb
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Acknowledgments
 
 - Vuetify for the beautiful UI components
