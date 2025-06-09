@@ -3,22 +3,29 @@
     <v-main class="bg-grey-lighten-4">
       <v-container class="py-8">
         <v-card class="mx-auto" max-width="1000" elevation="2">
-          <v-card-title class="text-h4 text-center py-6 bg-primary text-white">
-            Wedding Alcohol Calculator
+          <v-card-title class="text-h4 text-center py-6 bg-primary text-white d-flex justify-space-between align-center">
+            {{ $t('app.title') }}
+            <v-btn
+              color="white"
+              variant="text"
+              @click="toggleLanguage"
+            >
+              {{ currentLanguage.toUpperCase() }}
+            </v-btn>
           </v-card-title>
 
           <v-card-text class="pa-6">
             <v-form @submit.prevent="calculateQuantities" v-model="isFormValid">
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
-                  Guest Information
+                  {{ $t('app.guestInfo') }}
                 </v-card-title>
                 <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicBeerDrinkers"
-                        label="Alcoholic Beer Drinkers"
+                        :label="$t('app.fields.alcoholicBeerDrinkers')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -30,7 +37,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicBeerDrinkers"
-                        label=" Non-Alcoholic Beer Drinkers"
+                        :label="$t('app.fields.nonAlcoholicBeerDrinkers')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -42,7 +49,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicDrinkers"
-                        label="Alcoholic Drink Drinkers"
+                        :label="$t('app.fields.alcoholicDrinkers')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -54,7 +61,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicDrinkers"
-                        label="Non-Alcoholic Drink Drinkers"
+                        :label="$t('app.fields.nonAlcoholicDrinkers')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -69,14 +76,14 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
-                  Average Consumption (ml per person)
+                  {{ $t('app.consumption') }}
                 </v-card-title>
                 <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.alcoholicBeerPerPerson"
-                        label="Alcoholic Beer"
+                        :label="$t('app.fields.alcoholicBeer')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -88,7 +95,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.nonAlcoholicBeerPerPerson"
-                        label="Non-Alcoholic Beer"
+                        :label="$t('app.fields.nonAlcoholicBeer')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -100,7 +107,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.alcoholicDrinksPerPerson"
-                        label="Alcoholic Drinks"
+                        :label="$t('app.fields.alcoholicDrinks')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -112,7 +119,7 @@
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="consumption.nonAlcoholicDrinksPerPerson"
-                        label="Non-Alcoholic Drinks"
+                        :label="$t('app.fields.nonAlcoholicDrinks')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -127,7 +134,7 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
-                  Alcohol Types
+                  {{ $t('app.alcoholTypes') }}
                   <v-btn
                     color="white"
                     @click="addAlcoholType"
@@ -135,7 +142,7 @@
                     size="small"
                     prepend-icon="mdi-plus"
                   >
-                    Add Type
+                    {{ $t('app.addType') }}
                   </v-btn>
                 </v-card-title>
                 <v-card-text class="pt-4">
@@ -146,7 +153,7 @@
                         :items="categoryOptions"
                         item-title="label"
                         item-value="value"
-                        label="Category"
+                        :label="$t('app.fields.category')"
                         :rules="[rules.required]"
                         required
                         density="compact"
@@ -157,18 +164,18 @@
                     <v-col cols="12" sm="4">
                       <v-text-field
                         v-model="alcohol.name"
-                        label="Name"
+                        :label="$t('app.fields.name')"
                         :rules="[rules.required]"
                         required
                         density="compact"
                         hide-details="auto"
-                        bg-color="white"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="3">
                       <v-text-field
                         v-model.number="alcohol.volume"
-                        label="Volume (ml)"
+                        :label="$t('app.fields.volume')"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
@@ -195,7 +202,7 @@
 
               <v-card class="mb-6" elevation="1">
                 <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
-                  Drink Types
+                  {{ $t('app.drinkTypes') }}
                   <v-btn
                     color="white"
                     @click="addDrinkType"
@@ -203,7 +210,7 @@
                     size="small"
                     prepend-icon="mdi-plus"
                   >
-                    Add Drink
+                    {{ $t('app.addDrink') }}
                   </v-btn>
                 </v-card-title>
                 <v-card-text class="pt-4">
@@ -219,7 +226,7 @@
                         <v-col cols="12" sm="4">
                           <v-text-field
                             v-model="drink.name"
-                            label="Drink Name"
+                            :label="$t('app.fields.drinkName')"
                             :rules="[rules.required]"
                             required
                             density="compact"
@@ -255,7 +262,7 @@
                                 :items="nonBeerAlcoholTypes"
                                 item-title="name"
                                 item-value="name"
-                                label="Alcohol"
+                                :label="$t('app.fields.alcohol')"
                                 :rules="[rules.required]"
                                 required
                                 density="compact"
@@ -274,7 +281,7 @@
                             <v-col cols="12" sm="5">
                               <v-text-field
                                 v-model.number="ingredient.volume"
-                                label="Volume (ml)"
+                                :label="$t('app.fields.volume')"
                                 type="number"
                                 :rules="[rules.required, rules.positive]"
                                 required
@@ -307,7 +314,7 @@
                         size="small"
                         prepend-icon="mdi-plus"
                       >
-                        Add Ingredient
+                        {{ $t('app.addIngredient') }}
                       </v-btn>
                     </v-card-text>
                   </v-card>
@@ -325,22 +332,22 @@
               <template v-slot:prepend>
                 <v-icon>mdi-alert</v-icon>
               </template>
-              Please fill in all required fields with valid values to see the results.
+              {{ $t('app.warning') }}
             </v-alert>
           </v-card-text>
 
           <v-card-text v-if="isFormValid && results.length > 0" class="pa-6">
             <v-card elevation="1">
               <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white">
-                Recommended Quantities
+                {{ $t('app.results') }}
               </v-card-title>
               <v-card-text class="pt-4">
                 <v-table density="compact" bg-color="grey-lighten-4">
                   <thead>
                     <tr>
-                      <th>Type</th>
-                      <th>Quantity</th>
-                      <th>Total Volume (ml)</th>
+                      <th>{{ $t('app.type') }}</th>
+                      <th>{{ $t('app.quantity') }}</th>
+                      <th>{{ $t('app.totalVolume') }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -362,12 +369,21 @@
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
+
+const currentLanguage = computed(() => locale.value)
+
+function toggleLanguage() {
+  locale.value = locale.value === 'en' ? 'pl' : 'en'
+}
 
 const isFormValid = ref(false)
 
 const rules = {
-  required: v => !!v || 'This field is required',
-  positive: v => v > 0 || 'Value must be greater than 0'
+  required: v => !!v || t('app.fields.required'),
+  positive: v => v > 0 || t('app.fields.positive')
 }
 
 const guestInfo = reactive({
@@ -387,7 +403,7 @@ const consumption = reactive({
 const alcoholTypes = ref([{
   name: '',
   volume: null,
-  category: 'alcoholic_beer' // Options: alcoholic_beer, non_alcoholic_beer, alcoholic_drink, non_alcoholic_drink
+  category: 'alcoholic_beer'
 }])
 
 const drinkTypes = ref([{
@@ -398,12 +414,12 @@ const drinkTypes = ref([{
 const showResults = ref(false)
 const results = ref([])
 
-const categoryOptions = [
-  { value: 'alcoholic_beer', label: 'Alcoholic Beer' },
-  { value: 'non_alcoholic_beer', label: 'Non-Alcoholic Beer' },
-  { value: 'alcoholic_drink', label: 'Alcoholic Drink' },
-  { value: 'non_alcoholic_drink', label: 'Non-Alcoholic Drink' }
-]
+const categoryOptions = computed(() => [
+  { value: 'alcoholic_beer', label: t('app.categories.alcoholicBeer') },
+  { value: 'non_alcoholic_beer', label: t('app.categories.nonAlcoholicBeer') },
+  { value: 'alcoholic_drink', label: t('app.categories.alcoholicDrink') },
+  { value: 'non_alcoholic_drink', label: t('app.categories.nonAlcoholicDrink') }
+])
 
 // Add computed property to filter out beer types
 const nonBeerAlcoholTypes = computed(() => {
