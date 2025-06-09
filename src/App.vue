@@ -1,61 +1,77 @@
 <template>
   <v-app>
-    <v-main>
-      <v-container>
-        <v-card class="mx-auto" max-width="1200">
-          <v-card-title class="text-h4 text-center py-4">
+    <v-main class="bg-grey-lighten-4">
+      <v-container class="py-8">
+        <v-card class="mx-auto" max-width="1000" elevation="2">
+          <v-card-title class="text-h4 text-center py-6 bg-primary text-white">
             Wedding Alcohol Calculator
           </v-card-title>
 
-          <v-card-text>
+          <v-card-text class="pa-6">
             <v-form @submit.prevent="calculateQuantities" v-model="isFormValid">
-              <v-card class="mb-4">
-                <v-card-title>Guest Information</v-card-title>
-                <v-card-text>
+              <v-card class="mb-6" elevation="1">
+                <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
+                  Guest Information
+                </v-card-title>
+                <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicBeerDrinkers"
-                        label="Number of Alcoholic Beer Drinkers"
+                        label="Alcoholic Beer Drinkers"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicBeerDrinkers"
-                        label="Number of Non-Alcoholic Beer Drinkers"
+                        label=" Non-Alcoholic Beer Drinkers"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.alcoholicDrinkers"
-                        label="Number of Alcoholic Drink Drinkers"
+                        label="Alcoholic Drink Drinkers"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
                         v-model.number="guestInfo.nonAlcoholicDrinkers"
-                        label="Number of Non-Alcoholic Drink Drinkers"
+                        label="Non-Alcoholic Drink Drinkers"
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
 
-              <v-card class="mb-4">
-                <v-card-title>Average Consumption (ml per person)</v-card-title>
-                <v-card-text>
+              <v-card class="mb-6" elevation="1">
+                <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white">
+                  Average Consumption (ml per person)
+                </v-card-title>
+                <v-card-text class="pt-4">
                   <v-row>
                     <v-col cols="12" sm="6" md="3">
                       <v-text-field
@@ -64,6 +80,9 @@
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
@@ -73,6 +92,9 @@
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
@@ -82,6 +104,9 @@
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
@@ -91,16 +116,30 @@
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-card-text>
               </v-card>
 
-              <v-card class="mb-4">
-                <v-card-title>Alcohol Types</v-card-title>
-                <v-card-text>
-                  <v-row v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index">
+              <v-card class="mb-6" elevation="1">
+                <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
+                  Alcohol Types
+                  <v-btn
+                    color="white"
+                    @click="addAlcoholType"
+                    variant="text"
+                    size="small"
+                    prepend-icon="mdi-plus"
+                  >
+                    Add Type
+                  </v-btn>
+                </v-card-title>
+                <v-card-text class="pt-4">
+                  <v-row v-for="(alcohol, index) in alcoholTypes" :key="'alcohol-' + index" class="mb-2">
                     <v-col cols="12" sm="3">
                       <v-select
                         v-model="alcohol.category"
@@ -110,6 +149,9 @@
                         label="Category"
                         :rules="[rules.required]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="4">
@@ -118,6 +160,9 @@
                         label="Name"
                         :rules="[rules.required]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="white"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="3">
@@ -127,6 +172,9 @@
                         type="number"
                         :rules="[rules.required, rules.positive]"
                         required
+                        density="compact"
+                        hide-details="auto"
+                        bg-color="grey-lighten-4"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="2" class="d-flex align-center">
@@ -135,28 +183,36 @@
                         icon
                         @click="removeAlcoholType(index)"
                         :disabled="alcoholTypes.length === 1"
+                        variant="text"
+                        size="small"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-col>
                   </v-row>
-                  <v-btn
-                    color="primary"
-                    @click="addAlcoholType"
-                    class="mt-2"
-                  >
-                    Add Alcohol Type
-                  </v-btn>
                 </v-card-text>
               </v-card>
 
-              <v-card class="mb-4">
-                <v-card-title>Drink Types</v-card-title>
-                <v-card-text>
+              <v-card class="mb-6" elevation="1">
+                <v-card-title class="text-subtitle-1 font-weight-bold bg-primary text-white d-flex justify-space-between align-center">
+                  Drink Types
+                  <v-btn
+                    color="white"
+                    @click="addDrinkType"
+                    variant="text"
+                    size="small"
+                    prepend-icon="mdi-plus"
+                  >
+                    Add Drink
+                  </v-btn>
+                </v-card-title>
+                <v-card-text class="pt-4">
                   <v-card
                     v-for="(drink, index) in drinkTypes"
                     :key="'drink-' + index"
                     class="mb-4"
+                    elevation="0"
+                    bg-color="grey-lighten-4"
                   >
                     <v-card-text>
                       <v-row>
@@ -166,6 +222,9 @@
                             label="Drink Name"
                             :rules="[rules.required]"
                             required
+                            density="compact"
+                            hide-details="auto"
+                            bg-color="white"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="2" class="d-flex align-center">
@@ -173,7 +232,8 @@
                             color="error"
                             icon
                             @click="removeDrinkType(index)"
-                            :disabled="false"
+                            variant="text"
+                            size="small"
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -184,6 +244,8 @@
                         v-for="(ingredient, ingIndex) in drink.ingredients"
                         :key="'ingredient-' + ingIndex"
                         class="mb-2"
+                        elevation="0"
+                        bg-color="white"
                       >
                         <v-card-text>
                           <v-row>
@@ -196,6 +258,9 @@
                                 label="Alcohol"
                                 :rules="[rules.required]"
                                 required
+                                density="compact"
+                                hide-details="auto"
+                                bg-color="grey-lighten-4"
                               >
                                 <template v-slot:item="{ props, item }">
                                   <v-list-item v-bind="props">
@@ -213,6 +278,9 @@
                                 type="number"
                                 :rules="[rules.required, rules.positive]"
                                 required
+                                density="compact"
+                                hide-details="auto"
+                                bg-color="grey-lighten-4"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="2" class="d-flex align-center">
@@ -221,6 +289,8 @@
                                 icon
                                 @click="removeIngredient(index, ingIndex)"
                                 :disabled="drink.ingredients.length === 1"
+                                variant="text"
+                                size="small"
                               >
                                 <v-icon>mdi-delete</v-icon>
                               </v-btn>
@@ -233,19 +303,14 @@
                         color="primary"
                         @click="addIngredient(index)"
                         class="mt-2"
+                        variant="text"
+                        size="small"
+                        prepend-icon="mdi-plus"
                       >
                         Add Ingredient
                       </v-btn>
                     </v-card-text>
                   </v-card>
-
-                  <v-btn
-                    color="primary"
-                    @click="addDrinkType"
-                    class="mt-2"
-                  >
-                    Add Drink Type
-                  </v-btn>
                 </v-card-text>
               </v-card>
 
@@ -255,17 +320,21 @@
                 block
                 :disabled="!isFormValid"
                 class="mt-4"
+                size="large"
+                elevation="2"
               >
                 Calculate
               </v-btn>
             </v-form>
           </v-card-text>
 
-          <v-card-text v-if="showResults">
-            <v-card>
-              <v-card-title>Recommended Quantities</v-card-title>
-              <v-card-text>
-                <v-table>
+          <v-card-text v-if="showResults" class="pa-6">
+            <v-card elevation="1">
+              <v-card-title class="text-subtitle-1 font-weight-bold bg-secondary text-white">
+                Recommended Quantities
+              </v-card-title>
+              <v-card-text class="pt-4">
+                <v-table density="compact" bg-color="grey-lighten-4">
                   <thead>
                     <tr>
                       <th>Type</th>
