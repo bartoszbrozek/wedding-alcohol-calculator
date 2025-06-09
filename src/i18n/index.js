@@ -2,22 +2,28 @@ import { createI18n } from 'vue-i18n'
 import en from './en'
 import pl from './pl'
 
+// Create i18n instance with runtime-only mode
 const i18n = createI18n({
   legacy: false,
   locale: localStorage.getItem('preferredLanguage') || 'en',
   fallbackLocale: 'en',
   messages: {
-    en: en,
-    pl: pl
+    en,
+    pl
   },
-  runtimeOnly: import.meta.env.MODE === 'development' ? false : true,
+  // Force runtime-only mode for all environments
+  runtimeOnly: true,
+  // Enable global injection
   globalInjection: true,
+  // Disable warnings
   silentTranslationWarn: true,
   silentFallbackWarn: true,
   missingWarn: false,
   fallbackWarn: false,
+  // Enable composition API
   allowComposition: true,
+  // Enable sync mode
   sync: true
 })
 
-export default i18n 
+export default i18n

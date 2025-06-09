@@ -20,7 +20,12 @@ const vuetify = createVuetify({
   }
 })
 
+// Create the app instance
 const app = createApp(App)
+
+// Use plugins
 app.use(vuetify)
 app.use(i18n)
+
+// Mount the app
 app.mount('#app')
