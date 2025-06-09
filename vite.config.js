@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: '/',
+  base: process.env.NODE_ENV === 'production' ? '/wedding-alcohol-calculator/' : '/',
   build: {
     assetsDir: 'assets',
     rollupOptions: {
@@ -13,4 +13,4 @@ export default defineConfig({
       }
     }
   }
-}) 
+})
